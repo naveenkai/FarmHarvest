@@ -55,6 +55,20 @@ class ShoppingCart {
             });
         }
 
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mobileMenu && !mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // Close mobile menu when clicking nav links
+        document.querySelectorAll('#mobile-menu .nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
         // Cart sidebar toggle
         document.getElementById('cart-toggle').addEventListener('click', () => {
             this.toggleCart();
