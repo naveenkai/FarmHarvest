@@ -210,6 +210,9 @@ class ShoppingCart {
         this.saveCart();
         this.updateCartDisplay();
         this.updateCartCount();
+        
+        // Show cart sidebar after adding item
+        this.toggleCart();
     }
 
     removeFromCart(productId) {
