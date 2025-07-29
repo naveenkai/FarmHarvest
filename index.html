@@ -188,6 +188,13 @@
         <section id="products" class="hidden">
             <div class="py-16 bg-white">
                 <div class="container mx-auto px-4">
+                    <!-- Back to Home Button -->
+                    <div class="mb-8">
+                        <button id="back-to-home" class="inline-flex items-center bg-organic-brown text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition">
+                            <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                        </button>
+                    </div>
+                    
                     <h1 class="text-4xl font-bold text-center text-organic-brown mb-12">Our Organic Products</h1>
                     
                     <!-- Product Categories -->
@@ -334,6 +341,25 @@
                                         <i class="fas fa-cart-plus mr-2"></i>Add to Cart
                                     </button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Now Card (Hidden by default, shown when cart has items) -->
+                    <div id="order-now-card" class="mt-12 bg-gradient-to-r from-organic-green to-organic-brown p-8 rounded-lg shadow-lg text-white text-center hidden">
+                        <div class="max-w-2xl mx-auto">
+                            <div class="flex items-center justify-center mb-4">
+                                <i class="fas fa-shopping-cart text-3xl mr-3"></i>
+                                <h2 class="text-2xl font-bold">Ready to Order?</h2>
+                            </div>
+                            <p class="text-lg mb-6">You have <span id="order-card-count">0</span> item(s) in your cart totaling <span id="order-card-total">₹0</span></p>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <button id="order-now-btn" class="bg-white text-organic-green px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                                    <i class="fas fa-rocket mr-2"></i>Order Now
+                                </button>
+                                <button id="view-cart-from-order" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-organic-green transition">
+                                    <i class="fas fa-eye mr-2"></i>View Cart
+                                </button>
                             </div>
                         </div>
                     </div>

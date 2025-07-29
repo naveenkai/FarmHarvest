@@ -45,6 +45,20 @@ class ShoppingCart {
             this.toggleCart();
         });
 
+        // Back to home button
+        document.getElementById('back-to-home').addEventListener('click', () => {
+            this.showSection('home');
+        });
+
+        // Order now card buttons
+        document.getElementById('order-now-btn').addEventListener('click', () => {
+            this.processOrder();
+        });
+
+        document.getElementById('view-cart-from-order').addEventListener('click', () => {
+            this.toggleCart();
+        });
+
         document.getElementById('close-cart').addEventListener('click', () => {
             this.closeCart();
         });
@@ -264,8 +278,10 @@ class ShoppingCart {
 
     updateCartCount() {
         const count = this.items.reduce((sum, item) => sum + item.quantity, 0);
-        const cartCountElements = document.querySelectorAll('#cart-count, #mobile-cart-count, #hero-cart-count');
+        const total = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         
+        // Update cart count elements
+        const cartCountElements = document.querySelectorAll('#cart-count, #mobile-cart-count, #hero-cart-count');
         cartCountElements.forEach(element => {
             element.textContent = count;
             if (count > 0) {
@@ -274,6 +290,68 @@ class ShoppingCart {
                 element.classList.add('hidden');
             }
         });
+
+        // Update order card
+        this.updateOrderCard(count, total);
+    }
+
+    updateOrderCard(count, total) {
+        const orderCard = document.getElementById('order-now-card');
+        const orderCardCount = document.getElementById('order-card-count');
+        const orderCardTotal = document.getElementById('order-card-total');
+        
+        if (count > 0) {
+            orderCard.classList.remove('hidden');
+            orderCardCount.textContent = count;
+            orderCardTotal.textContent = `₹${total}`;
+        } else {
+            orderCard.classList.add('hidden');
+        }
+    }
+
+    processOrder() {
+        if (this.items.length === 0) {
+            alert('Your cart is empty! Please add some items before ordering.');
+            return;
+        }
+
+        const total = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const itemsList = this.items.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+        
+        const orderDetails = `
+🌱 ORDER CONFIRMATION 🌱
+
+Thank you for choosing The Sustainable Organic Farming!
+
+📦 Order Details:
+${itemsList}
+
+💰 Total Amount: ₹${total}
+
+📞 Next Steps:
+• Our team will contact you within 2 hours to confirm your order
+• We'll arrange delivery at your preferred time
+• Payment can be made upon delivery (Cash on Delivery)
+
+📍 Delivery Areas: Within 10km of Lanjigarh, Odisha
+🚚 Delivery Time: 7 AM - 12 PM or 3 PM - 7 PM
+🆓 Free delivery on orders above ₹500
+
+Thank you for supporting sustainable organic farming! 🌿
+        `;
+        
+        alert(orderDetails);
+        
+        // Clear cart after successful order
+        this.items = [];
+        this.saveCart();
+        this.updateCartDisplay();
+        this.updateCartCount();
+        
+        // Show success message
+        setTimeout(() => {
+            alert('🎉 Order placed successfully! We will contact you soon for delivery confirmation.');
+        }, 500);
     }
 
     toggleCart() {
