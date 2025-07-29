@@ -50,13 +50,14 @@ class ShoppingCart {
             this.showSection('home');
         });
 
-        // Order now card buttons
+        // Cart card buttons
         document.getElementById('order-now-btn').addEventListener('click', () => {
-            this.processOrder();
+            this.toggleCart();
         });
 
         document.getElementById('view-cart-from-order').addEventListener('click', () => {
-            this.toggleCart();
+            // Continue shopping - do nothing, just close any open modals
+            this.closeCart();
         });
 
         document.getElementById('close-cart').addEventListener('click', () => {
@@ -210,9 +211,6 @@ class ShoppingCart {
         this.saveCart();
         this.updateCartDisplay();
         this.updateCartCount();
-        
-        // Show cart sidebar after adding item
-        this.toggleCart();
     }
 
     removeFromCart(productId) {
