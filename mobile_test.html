@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Sustainable Organic Farming - Premium Organic Products</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+</head>
+<body class="bg-cream font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="assets/logo.svg" alt="The SOF Logo" class="w-8 h-8 md:w-12 md:h-12" />
+                <div class="text-sm sm:text-base md:text-2xl font-bold text-organic-green">The Sustainable Organic Farming</div>
+            </div>
+            
+            <!-- User Profile Section -->
+            <div id="user-profile-section" class="hidden md:flex items-center space-x-4">
+                <div class="text-right hidden lg:block">
+                    <div id="user-greeting" class="text-sm text-organic-brown font-medium"></div>
+                    <div id="user-name" class="text-lg font-bold text-organic-green"></div>
+                </div>
+                <div class="relative">
+                    <button id="profile-menu-btn" class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-organic-green hover:border-organic-brown transition">
+                        <img id="user-profile-pic" src="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=40" alt="Profile" class="w-full h-full object-cover">
+                    </button>
+                    <!-- Profile Dropdown -->
+                    <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                        <div class="py-2">
+                            <button id="edit-profile-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-user mr-2"></i>Edit Profile
+                            </button>
+                            <button id="change-photo-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-camera mr-2"></i>Change Photo
+                            </button>
+                            <hr class="my-1">
+                            <button id="user-logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Home</a>
+                <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Products</a>
+                <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">About</a>
+                <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
+                <button id="user-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">
+                    <i class="fas fa-user mr-1"></i>Login
+                </button>
+                <button id="admin-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">Admin</button>
+                <button id="cart-toggle" class="relative bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
+                    <i class="fas fa-shopping-cart mr-2"></i>Cart
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hidden">0</span>
+                </button>
+            </div>
+            
+            <!-- Mobile Hamburger Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-organic-brown">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu (Only visible on mobile devices) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg border-t border-gray-200">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
+                        <i class="fas fa-leaf mr-2"></i>Products
+                    </a>
+                    <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
+                        <i class="fas fa-info-circle mr-2"></i>About
+                    </a>
+                    <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
+                        <i class="fas fa-envelope mr-2"></i>Contact
+                    </a>
+                    <button id="mobile-user-login-btn" class="text-left text-organic-brown hover:text-organic-green transition duration-300 py-2 border-b border-gray-100">
+                        <i class="fas fa-user mr-2"></i>Login
+                    </button>
+                    <button id="mobile-admin-btn" class="text-left text-organic-brown hover:text-organic-green transition duration-300 py-2 border-b border-gray-100">
+                        <i class="fas fa-cog mr-2"></i>Admin
+                    </button>
+                    <button id="mobile-cart-toggle" class="bg-organic-green text-white px-4 py-3 rounded-lg hover:bg-opacity-90 transition text-center mt-2">
+                        <i class="fas fa-shopping-cart mr-2"></i>Cart (<span id="mobile-cart-count">0</span>)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed right-0 top-0 h-full w-96 bg-white shadow-xl transform translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-organic-brown">Shopping Cart</h2>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cart-items" class="space-y-4 mb-6 max-h-96 overflow-y-auto">
+                <!-- Cart items will be inserted here -->
+            </div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-bold text-organic-brown">Total: </span>
+                    <span id="cart-total" class="text-lg font-bold text-organic-green">₹0</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-organic-green text-white py-3 rounded-lg hover:bg-opacity-90 transition">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Admin Login</h3>
+                    <button id="close-admin-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="admin-login-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Admin ID</label>
+                        <input type="text" id="admin-id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="admin-password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancel-admin-login" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-organic-green text-white rounded-lg hover:bg-opacity-90 transition">
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Login Modal -->
+    <div id="user-login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Login / Register</h3>
+                    <button id="close-user-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Tab Buttons -->
+                <div class="flex mb-6 border-b">
+                    <button id="login-tab" class="flex-1 py-2 text-center font-medium border-b-2 border-organic-green text-organic-green">Login</button>
+                    <button id="register-tab" class="flex-1 py-2 text-center font-medium text-gray-500 hover:text-organic-green">Register</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="login-form-container">
+                    <form id="user-login-form">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="login-email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                            <input type="text" id="login-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-organic-green text-white py-2 rounded-lg hover:bg-opacity-90 transition">
+                            Send OTP
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="register-form-container" class="hidden">
+                    <form id="user-register-form">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="register-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="register-email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone (Optional)</label>
+                            <input type="tel" id="register-phone" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-organic-green text-white py-2 rounded-lg hover:bg-opacity-90 transition">
+                            Register & Send OTP
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Verification Modal -->
+    <div id="otp-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Verify OTP</h3>
+                    <button id="close-otp-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="otp-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Enter OTP sent to your email</label>
+                        <input type="text" id="otp-input" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green text-center text-2xl letter-spacing-wide" maxlength="6" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-organic-green text-white py-2 rounded-lg hover:bg-opacity-90 transition">
+                        Verify OTP
+                    </button>
+                </form>
+                
+                <div class="mt-4 text-center">
+                    <button id="resend-otp" class="text-organic-green hover:underline text-sm">Resend OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div id="profile-edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Edit Profile</h3>
+                    <button id="close-profile-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="profile-edit-form">
+                    <div class="mb-4 text-center">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-4 border-organic-green">
+                            <img id="preview-profile-pic" src="" alt="Profile Preview" class="w-full h-full object-cover">
+                        </div>
+                        <button type="button" id="change-profile-pic-btn" class="text-organic-green hover:underline text-sm">
+                            <i class="fas fa-camera mr-1"></i>Change Photo
+                        </button>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="edit-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="edit-email" class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100" readonly>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                        <input type="tel" id="edit-phone" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green">
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancel-profile-edit" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-organic-green text-white rounded-lg hover:bg-opacity-90 transition">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Selection Modal -->
+    <div id="photo-selection-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Choose Profile Photo</h3>
+                    <button id="close-photo-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-4 mb-6">
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=80" alt="Avatar 1" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=059669&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=059669&color=fff&size=80" alt="Avatar 2" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=0f766e&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=0f766e&color=fff&size=80" alt="Avatar 3" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=92400e&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=92400e&color=fff&size=80" alt="Avatar 4" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=be185d&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=be185d&color=fff&size=80" alt="Avatar 5" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=1e40af&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=1e40af&color=fff&size=80" alt="Avatar 6" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=7c2d12&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=7c2d12&color=fff&size=80" alt="Avatar 7" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=374151&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=374151&color=fff&size=80" alt="Avatar 8" class="w-full h-16 object-cover rounded">
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-gray-600 mb-4">Or enter a custom image URL:</p>
+                    <input type="url" id="custom-photo-url" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green mb-4" placeholder="https://example.com/photo.jpg">
+                    <button id="use-custom-photo" class="bg-organic-brown text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
+                        Use Custom Photo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Sections -->
+    <div id="content" class="content-section">
+        <!-- Home Section -->
+        <section id="home" class="block">
+            <!-- Hero Section with Auto-sliding Carousel -->
+            <div class="hero relative py-20 overflow-hidden">
+                <!-- Sliding Background Images -->
+                <div id="hero-carousel" class="absolute inset-0">
+                    <div class="carousel-slide active" style="background-image: url('https://pixabay.com/get/gcdacfee72b65da7c0ecafb8c8a2cb0d1eafb7ea6bc82eaab0ae84c0e2174c14a4c30e2d440925fa9ccd75dd49c7654725f8655acc33de9d223f486f27cba18db_1280.jpg');">
+                        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                    </div>
+                    <div class="carousel-slide" style="background-image: url('https://pixabay.com/get/g0581cd6d89c6c7a12e15644b3ce8f532a2d47d74c716eb1419a409064c052cba0a3d83a16d8367096b1dad5244e9459e571324b8939249aa26a9756a4fe5036c_1280.jpg');">
+                        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                    </div>
+                    <div class="carousel-slide" style="background-image: url('https://pixabay.com/get/g195c00efc787726497e5951c329d525d38709b3524d13b6aa307c3fdd46b86ad1619e6db64d57ef73e5a60c48554a81affb07eb071d73cffbd575713d5a6889f_1280.jpg');">
+                        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                    </div>
+                    <div class="carousel-slide" style="background-image: url('https://pixabay.com/get/gcafab46e499d79507e9eec1e005058491b55741fb6e18b13a53da3b20bd59a938a5bd5bd63d11e391c91dd88c3115d83766dc5f0bf68fef5459afee743127fc6_1280.jpg');">
+                        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                    </div>
+                </div>
+                
+                <!-- Content Layer -->
+                <div class="container mx-auto px-4 relative z-10">
+                    <div class="max-w-3xl text-white">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4">Premium Organic Products</h1>
+                        <p class="text-xl mb-6">Farm Fresh Eggs, Desi Chicken, Moringa & Organic Superfoods</p>
+                        <div class="flex flex-wrap items-center gap-2 mb-6">
+                            <span class="px-3 py-1 bg-white text-organic-green rounded-full">100% Organic</span>
+                            <span class="px-3 py-1 bg-white text-organic-green rounded-full">Farm Fresh</span>
+                            <span class="px-3 py-1 bg-white text-organic-green rounded-full">Chemical Free</span>
+                            <span class="px-3 py-1 bg-white text-organic-green rounded-full">Sustainable</span>
+                        </div>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#products" class="inline-block bg-organic-green text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition nav-link">Shop Now</a>
+                            <button id="hero-cart-toggle" class="inline-block bg-organic-brown text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition">
+                                <i class="fas fa-shopping-cart mr-2"></i>View Cart (<span id="hero-cart-count">0</span>)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel Indicators -->
+                <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                    <button class="carousel-indicator active w-3 h-3 rounded-full bg-white bg-opacity-70 hover:bg-opacity-100 transition" data-slide="0"></button>
+                    <button class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-40 hover:bg-opacity-100 transition" data-slide="1"></button>
+                    <button class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-40 hover:bg-opacity-100 transition" data-slide="2"></button>
+                    <button class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-40 hover:bg-opacity-100 transition" data-slide="3"></button>
+                </div>
+            </div>
+
+            <!-- Featured Products (moved to top) -->
+            <div class="py-16 bg-light-green">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-organic-brown mb-12">Featured Products</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="featured-product bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300" data-category="vegetables" onclick="cart.navigateToCategory('vegetables')">
+                            <img src="https://pixabay.com/get/g0581cd6d89c6c7a12e15644b3ce8f532a2d47d74c716eb1419a409064c052cba0a3d83a16d8367096b1dad5244e9459e571324b8939249aa26a9756a4fe5036c_1280.jpg" alt="Organic Tomatoes" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Organic Tomatoes</h3>
+                                <p class="text-gray-700 mb-4">Fresh, juicy tomatoes with 27% higher vitamin C than conventional varieties</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-organic-green font-bold text-lg">₹120/kg</span>
+                                    <span class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">Click to explore</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="featured-product bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300" data-category="moringa" onclick="cart.navigateToCategory('moringa')">
+                            <img src="https://pixabay.com/get/g195c00efc787726497e5951c329d525d38709b3524d13b6aa307c3fdd46b86ad1619e6db64d57ef73e5a60c48554a81affb07eb071d73cffbd575713d5a6889f_1280.jpg" alt="Moringa Powder" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Moringa Powder</h3>
+                                <p class="text-gray-700 mb-4">Superfood powder with 90+ nutrients, all 9 essential amino acids</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-organic-green font-bold text-lg">₹450/100g</span>
+                                    <span class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">Click to explore</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="featured-product bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300" data-category="fruits" onclick="cart.navigateToCategory('fruits')">
+                            <img src="https://pixabay.com/get/gcafab46e499d79507e9eec1e005058491b55741fb6e18b13a53da3b20bd59a938a5bd5bd63d11e391c91dd88c3115d83766dc5f0bf68fef5459afee743127fc6_1280.jpg" alt="Fresh Watermelon" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Fresh Watermelon</h3>
+                                <p class="text-gray-700 mb-4">92% water content, rich in lycopene and natural antioxidants</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-organic-green font-bold text-lg">₹40/kg</span>
+                                    <span class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">Click to explore</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Choose Our Organic Products (moved after featured products) -->
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-organic-brown mb-12">Why Choose Our Organic Products</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div class="bg-light-green p-6 rounded-lg text-center">
+                            <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-leaf text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-organic-brown">100% Organic</h3>
+                            <p class="text-gray-700">Grown without synthetic pesticides, herbicides, or chemical fertilizers</p>
+                        </div>
+                        <div class="bg-light-green p-6 rounded-lg text-center">
+                            <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-heart text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-organic-brown">Health Benefits</h3>
+                            <p class="text-gray-700">Rich in vitamins, minerals, and antioxidants for optimal nutrition</p>
+                        </div>
+                        <div class="bg-light-green p-6 rounded-lg text-center">
+                            <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-truck text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-organic-brown">Fresh Delivery</h3>
+                            <p class="text-gray-700">Farm-to-table freshness delivered within 24 hours of harvest</p>
+                        </div>
+                        <div class="bg-light-green p-6 rounded-lg text-center">
+                            <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-recycle text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-organic-brown">Sustainable</h3>
+                            <p class="text-gray-700">Environmentally friendly farming practices for a better future</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="hidden">
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <!-- Back to Home Button -->
+                    <div class="mb-8">
+                        <button id="back-to-home" class="inline-flex items-center bg-organic-brown text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition">
+                            <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                        </button>
+                    </div>
+                    
+                    <h1 class="text-4xl font-bold text-center text-organic-brown mb-12">Our Organic Products</h1>
+                    
+                    <!-- Product Categories -->
+                    <div class="mb-8">
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <button class="category-filter active bg-organic-green text-white px-6 py-2 rounded-lg" data-category="all">All Products</button>
+                            <button class="category-filter bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-organic-green hover:text-white transition" data-category="vegetables">Vegetables</button>
+                            <button class="category-filter bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-organic-green hover:text-white transition" data-category="fruits">Fruits</button>
+                            <button class="category-filter bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-organic-green hover:text-white transition" data-category="moringa">Moringa Products</button>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Vegetables -->
+                        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="vegetables">
+                            <img src="https://pixabay.com/get/g0581cd6d89c6c7a12e15644b3ce8f532a2d47d74c716eb1419a409064c052cba0a3d83a16d8367096b1dad5244e9459e571324b8939249aa26a9756a4fe5036c_1280.jpg" alt="Organic Tomatoes" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Organic Tomatoes</h3>
+                                <p class="text-gray-600 text-sm mb-3">27% higher vitamin C than conventional varieties. Rich in lycopene and antioxidants.</p>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-organic-green font-bold text-xl">₹120/kg</span>
+                                    <span class="text-green-600 text-sm font-medium">In Stock</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex items-center border rounded-lg">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="decrease">-</button>
+                                        <input type="number" class="quantity-input w-16 text-center border-0 focus:outline-none" value="1" min="1" max="10">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="increase">+</button>
+                                    </div>
+                                    <button class="add-to-cart flex-1 bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition" data-id="tomatoes" data-name="Organic Tomatoes" data-price="120" data-unit="kg" data-image="https://pixabay.com/get/g0581cd6d89c6c7a12e15644b3ce8f532a2d47d74c716eb1419a409064c052cba0a3d83a16d8367096b1dad5244e9459e571324b8939249aa26a9756a4fe5036c_1280.jpg">
+                                        <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="vegetables">
+                            <img src="https://pixabay.com/get/gbb56b265bce11d3fcd3af88468b5ce9c3acb5c508517ced6dbdc07a66a282acee9084918893ffaa4b1784b1e260f64da99254babf57cf4ded24c237993c3b63d_1280.jpg" alt="Organic Potatoes" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Organic Potatoes</h3>
+                                <p class="text-gray-600 text-sm mb-3">4x more vitamin B5 than tomatoes. High in potassium and dietary fiber.</p>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-organic-green font-bold text-xl">₹60/kg</span>
+                                    <span class="text-green-600 text-sm font-medium">In Stock</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex items-center border rounded-lg">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="decrease">-</button>
+                                        <input type="number" class="quantity-input w-16 text-center border-0 focus:outline-none" value="1" min="1" max="10">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="increase">+</button>
+                                    </div>
+                                    <button class="add-to-cart flex-1 bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition" data-id="potatoes" data-name="Organic Potatoes" data-price="60" data-unit="kg" data-image="https://pixabay.com/get/gbb56b265bce11d3fcd3af88468b5ce9c3acb5c508517ced6dbdc07a66a282acee9084918893ffaa4b1784b1e260f64da99254babf57cf4ded24c237993c3b63d_1280.jpg">
+                                        <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fruits -->
+                        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="fruits">
+                            <img src="https://pixabay.com/get/gcafab46e499d79507e9eec1e005058491b55741fb6e18b13a53da3b20bd59a938a5bd5bd63d11e391c91dd88c3115d83766dc5f0bf68fef5459afee743127fc6_1280.jpg" alt="Fresh Watermelon" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Fresh Watermelon</h3>
+                                <p class="text-gray-600 text-sm mb-3">92% water content, 40% more lycopene than tomatoes. Excellent for hydration.</p>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-organic-green font-bold text-xl">₹40/kg</span>
+                                    <span class="text-green-600 text-sm font-medium">In Stock</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex items-center border rounded-lg">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="decrease">-</button>
+                                        <input type="number" class="quantity-input w-16 text-center border-0 focus:outline-none" value="1" min="1" max="10">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="increase">+</button>
+                                    </div>
+                                    <button class="add-to-cart flex-1 bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition" data-id="watermelon" data-name="Fresh Watermelon" data-price="40" data-unit="kg" data-image="https://pixabay.com/get/gcafab46e499d79507e9eec1e005058491b55741fb6e18b13a53da3b20bd59a938a5bd5bd63d11e391c91dd88c3115d83766dc5f0bf68fef5459afee743127fc6_1280.jpg">
+                                        <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Moringa Products -->
+                        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="moringa">
+                            <img src="https://pixabay.com/get/g195c00efc787726497e5951c329d525d38709b3524d13b6aa307c3fdd46b86ad1619e6db64d57ef73e5a60c48554a81affb07eb071d73cffbd575713d5a6889f_1280.jpg" alt="Moringa Powder" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Moringa Powder</h3>
+                                <p class="text-gray-600 text-sm mb-3">90+ nutrients, all 9 essential amino acids. Boosts immunity and energy levels.</p>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-organic-green font-bold text-xl">₹450/100g</span>
+                                    <span class="text-green-600 text-sm font-medium">In Stock</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex items-center border rounded-lg">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="decrease">-</button>
+                                        <input type="number" class="quantity-input w-16 text-center border-0 focus:outline-none" value="1" min="1" max="10">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="increase">+</button>
+                                    </div>
+                                    <button class="add-to-cart flex-1 bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition" data-id="moringa-powder" data-name="Moringa Powder" data-price="450" data-unit="100g" data-image="https://pixabay.com/get/g195c00efc787726497e5951c329d525d38709b3524d13b6aa307c3fdd46b86ad1619e6db64d57ef73e5a60c48554a81affb07eb071d73cffbd575713d5a6889f_1280.jpg">
+                                        <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="moringa">
+                            <img src="https://pixabay.com/get/g25a0ee6463687591a08379c58d7c5a103454e3b52fb57cc8c426fb1bae95e22d2033eb07dcb62f00e81ac97b64c978f6334ad645656fceef38ba890ff084bf90_1280.jpg" alt="Moringa Tea Powder" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Moringa Tea Powder</h3>
+                                <p class="text-gray-600 text-sm mb-3">Antioxidant-rich tea blend. Supports blood sugar control and heart health.</p>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-organic-green font-bold text-xl">₹320/100g</span>
+                                    <span class="text-green-600 text-sm font-medium">In Stock</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex items-center border rounded-lg">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="decrease">-</button>
+                                        <input type="number" class="quantity-input w-16 text-center border-0 focus:outline-none" value="1" min="1" max="10">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="increase">+</button>
+                                    </div>
+                                    <button class="add-to-cart flex-1 bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition" data-id="moringa-tea" data-name="Moringa Tea Powder" data-price="320" data-unit="100g" data-image="https://pixabay.com/get/g25a0ee6463687591a08379c58d7c5a103454e3b52fb57cc8c426fb1bae95e22d2033eb07dcb62f00e81ac97b64c978f6334ad645656fceef38ba890ff084bf90_1280.jpg">
+                                        <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card bg-white rounded-lg shadow-md overflow-hidden" data-category="moringa">
+                            <img src="https://pixabay.com/get/ge0fffcfc9a5081fecda9b11338e776d99996c286a5749695c7b47cf363bf69b65afea7835ee1e12c6e19e34e1770edca2acb6f49b368708a6d533eba1b209bcd_1280.jpg" alt="Moringa Acchar" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Moringa Acchar (Pickle)</h3>
+                                <p class="text-gray-600 text-sm mb-3">Traditional pickle made from fresh moringa leaves. Rich in vitamins and minerals.</p>
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-organic-green font-bold text-xl">₹250/250g</span>
+                                    <span class="text-green-600 text-sm font-medium">In Stock</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <div class="flex items-center border rounded-lg">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="decrease">-</button>
+                                        <input type="number" class="quantity-input w-16 text-center border-0 focus:outline-none" value="1" min="1" max="10">
+                                        <button class="quantity-btn px-3 py-1 text-gray-600 hover:bg-gray-100" data-action="increase">+</button>
+                                    </div>
+                                    <button class="add-to-cart flex-1 bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition" data-id="moringa-acchar" data-name="Moringa Acchar (Pickle)" data-price="250" data-unit="250g" data-image="https://pixabay.com/get/ge0fffcfc9a5081fecda9b11338e776d99996c286a5749695c7b47cf363bf69b65afea7835ee1e12c6e19e34e1770edca2acb6f49b368708a6d533eba1b209bcd_1280.jpg">
+                                        <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cart Card (Hidden by default, shown when cart has items) -->
+                    <div id="order-now-card" class="mt-12 bg-gradient-to-r from-organic-green to-organic-brown p-8 rounded-lg shadow-lg text-white text-center hidden">
+                        <div class="max-w-2xl mx-auto">
+                            <div class="flex items-center justify-center mb-4">
+                                <i class="fas fa-shopping-cart text-3xl mr-3"></i>
+                                <h2 class="text-2xl font-bold">Items in Your Cart</h2>
+                            </div>
+                            <p class="text-lg mb-6">You have <span id="order-card-count">0</span> item(s) in your cart totaling <span id="order-card-total">₹0</span></p>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <button id="order-now-btn" class="bg-white text-organic-green px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                                    <i class="fas fa-shopping-cart mr-2"></i>View Cart
+                                </button>
+                                <button id="view-cart-from-order" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-organic-green transition">
+                                    <i class="fas fa-plus mr-2"></i>Continue Shopping
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Benefits Section -->
+                    <div class="mt-16 bg-light-green p-8 rounded-lg">
+                        <h2 class="text-2xl font-bold text-organic-brown mb-6">Health Benefits of Our Products</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-organic-brown mb-3">Moringa: The Miracle Tree</h3>
+                                <ul class="text-gray-700 space-y-2">
+                                    <li>• Contains 90+ nutrients and all 9 essential amino acids</li>
+                                    <li>• 7x more vitamin C than oranges</li>
+                                    <li>• Supports blood sugar control and diabetes management</li>
+                                    <li>• Boosts immune system and prevents anemia</li>
+                                    <li>• Anti-inflammatory and heart health benefits</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-organic-brown mb-3">Fresh Vegetables & Fruits</h3>
+                                <ul class="text-gray-700 space-y-2">
+                                    <li>• Organic tomatoes: 27% higher vitamin C levels</li>
+                                    <li>• Potatoes: Rich in vitamin B5 and potassium</li>
+                                    <li>• Watermelon: 40% more lycopene than raw tomatoes</li>
+                                    <li>• Chemical-free and pesticide-free cultivation</li>
+                                    <li>• Better nutrient bioavailability and flavor</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="hidden">
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h1 class="text-4xl font-bold text-center text-organic-brown mb-12">About The Sustainable Organic Farming</h1>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <img src="https://pixabay.com/get/gb2be1b40e6865690b16fdedb520905b986c88da8b4ff344ceb0e233e6449d86fb9d329474f87ff99a297f2de5b20a0d4_1280.jpg" alt="Organic Farm" class="w-full rounded-lg shadow-md">
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-organic-brown mb-6">Our Mission</h2>
+                            <p class="text-gray-700 mb-6">
+                                At The Sustainable Organic Farming, we are committed to providing the highest quality organic products 
+                                while promoting sustainable agriculture practices. Our mission is to bridge the gap between traditional 
+                                farming wisdom and modern nutritional science.
+                            </p>
+                            <p class="text-gray-700 mb-6">
+                                We specialize in organic vegetables, superfoods like moringa, and premium quality produce that not only 
+                                tastes better but also provides superior nutritional value. Our farming methods are completely chemical-free, 
+                                ensuring that you get the purest, most natural products.
+                            </p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-organic-green">500+</div>
+                                    <div class="text-gray-600">Happy Customers</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-3xl font-bold text-organic-green">100%</div>
+                                    <div class="text-gray-600">Organic Products</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Farming Process -->
+                    <div class="bg-light-green p-8 rounded-lg mb-16">
+                        <h2 class="text-3xl font-bold text-organic-brown mb-8 text-center">Our Farming Process</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="text-center">
+                                <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-seedling text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Organic Seeds</h3>
+                                <p class="text-gray-700">We start with certified organic, non-GMO seeds that are naturally resistant to pests and diseases.</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-tint text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Natural Irrigation</h3>
+                                <p class="text-gray-700">Using drip irrigation and rainwater harvesting to ensure sustainable water management.</p>
+                            </div>
+                            <div class="text-center">
+                                <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="fas fa-hands text-2xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Hand Harvested</h3>
+                                <p class="text-gray-700">Careful hand-harvesting ensures optimal ripeness and minimal damage to produce.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold text-organic-brown mb-8">Our Certifications</h2>
+                        <div class="flex flex-wrap justify-center items-center gap-8">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <i class="fas fa-certificate text-3xl text-organic-green mb-2"></i>
+                                <h3 class="font-bold text-organic-brown">Organic Certified</h3>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <i class="fas fa-leaf text-3xl text-organic-green mb-2"></i>
+                                <h3 class="font-bold text-organic-brown">Pesticide Free</h3>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <i class="fas fa-award text-3xl text-organic-green mb-2"></i>
+                                <h3 class="font-bold text-organic-brown">Quality Assured</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="hidden">
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h1 class="text-4xl font-bold text-center text-organic-brown mb-12">Contact Us</h1>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div>
+                            <h2 class="text-2xl font-bold text-organic-brown mb-6">Get in Touch</h2>
+                            <div class="space-y-6">
+                                <div class="flex items-center">
+                                    <div class="bg-organic-green text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-organic-brown">Farm Location</h3>
+                                        <p class="text-gray-700">Sustainable Organic Farm, Lanjigarh, Odisha</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="bg-organic-green text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-organic-brown">Phone</h3>
+                                        <p class="text-gray-700">+91 9876543210</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="bg-organic-green text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-organic-brown">Email</h3>
+                                        <p class="text-gray-700">info@thesof.com</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delivery Information -->
+                            <div class="mt-8 bg-light-green p-6 rounded-lg">
+                                <h3 class="text-xl font-bold text-organic-brown mb-4">Delivery Information</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <h4 class="font-bold text-organic-brown">Delivery Areas</h4>
+                                        <p class="text-gray-700">We deliver within 10km radius of Lanjigarh</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-organic-brown">Delivery Timings</h4>
+                                        <p class="text-gray-700">Morning: 7 AM - 12 PM</p>
+                                        <p class="text-gray-700">Evening: 3 PM - 7 PM</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-organic-brown">Delivery Charges</h4>
+                                        <p class="text-gray-700">₹20-₹50 based on distance</p>
+                                        <p class="text-gray-700">Free delivery on orders above ₹500</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 class="text-2xl font-bold text-organic-brown mb-6">Send us a Message</h2>
+                            <form class="space-y-6">
+                                <div>
+                                    <label class="block text-organic-brown font-bold mb-2">Full Name</label>
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-organic-green" required>
+                                </div>
+                                <div>
+                                    <label class="block text-organic-brown font-bold mb-2">Email</label>
+                                    <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-organic-green" required>
+                                </div>
+                                <div>
+                                    <label class="block text-organic-brown font-bold mb-2">Phone</label>
+                                    <input type="tel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-organic-green" required>
+                                </div>
+                                <div>
+                                    <label class="block text-organic-brown font-bold mb-2">Message</label>
+                                    <textarea rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-organic-green" required></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-organic-green text-white py-3 rounded-lg hover:bg-opacity-90 transition">
+                                    Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Authentication Section -->
+        <section id="auth" class="hidden">
+            <div class="min-h-screen bg-gradient-to-br from-light-green to-cream flex items-center justify-center py-12 px-4">
+                <div class="max-w-md w-full">
+                    <div class="bg-white rounded-2xl shadow-xl p-8">
+                        <!-- Logo and Header -->
+                        <div class="text-center mb-8">
+                            <img src="assets/logo.svg" alt="The SOF Logo" class="w-20 h-20 mx-auto mb-4" />
+                            <h1 class="text-2xl font-bold text-organic-brown mb-2">Welcome Back</h1>
+                            <p class="text-gray-600">Sign in to your account</p>
+                        </div>
+
+                        <!-- Message Display -->
+                        <div id="auth-message" class="auth-message hidden"></div>
+
+                        <!-- Login Type Tabs -->
+                        <div class="flex mb-6 bg-gray-100 rounded-lg p-1">
+                            <button class="login-tab flex-1 py-2 px-4 rounded-md text-sm font-medium transition active" data-type="user">
+                                <i class="fas fa-user mr-2"></i>User Login
+                            </button>
+                            <button class="login-tab flex-1 py-2 px-4 rounded-md text-sm font-medium transition" data-type="admin">
+                                <i class="fas fa-user-shield mr-2"></i>Admin Login
+                            </button>
+                        </div>
+
+                        <!-- User Login Form -->
+                        <div id="user-login">
+                            <form id="user-login-form" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                    <input 
+                                        type="text" 
+                                        id="user-name" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-organic-green focus:border-transparent"
+                                        placeholder="Enter your full name"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                    <input 
+                                        type="email" 
+                                        id="user-email" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-organic-green focus:border-transparent"
+                                        placeholder="Enter your email address"
+                                        required
+                                    />
+                                </div>
+                                <button 
+                                    type="submit" 
+                                    id="user-login-btn"
+                                    class="w-full bg-organic-green text-white py-3 rounded-lg hover:bg-opacity-90 transition font-medium"
+                                >
+                                    Send OTP
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- OTP Verification -->
+                        <div id="otp-verification" style="display: none;">
+                            <div class="text-center mb-6">
+                                <i class="fas fa-envelope-open text-organic-green text-4xl mb-4"></i>
+                                <h3 class="text-lg font-bold text-organic-brown mb-2">Verify Your Email</h3>
+                                <p class="text-sm text-gray-600">
+                                    We've sent a 6-digit code to<br>
+                                    <span id="otp-email-display" class="font-medium text-organic-green"></span>
+                                </p>
+                            </div>
+                            
+                            <form id="otp-form" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
+                                    <input 
+                                        type="text" 
+                                        id="otp-input" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-organic-green focus:border-transparent text-center text-lg font-mono tracking-widest"
+                                        placeholder="000000"
+                                        maxlength="6"
+                                        required
+                                    />
+                                </div>
+                                <button 
+                                    type="submit" 
+                                    class="w-full bg-organic-green text-white py-3 rounded-lg hover:bg-opacity-90 transition font-medium"
+                                >
+                                    Verify OTP
+                                </button>
+                            </form>
+                            
+                            <div class="text-center mt-4">
+                                <p class="text-sm text-gray-600">
+                                    Didn't receive the code?
+                                    <button 
+                                        id="resend-otp" 
+                                        class="text-organic-green hover:text-organic-brown transition font-medium"
+                                    >
+                                        Resend <span id="countdown" class="text-red-500"></span>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Admin Login Form -->
+                        <div id="admin-login" style="display: none;">
+                            <form id="admin-login-form" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Admin ID</label>
+                                    <input 
+                                        type="text" 
+                                        id="admin-id" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-organic-green focus:border-transparent"
+                                        placeholder="Enter admin ID"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                                    <div class="relative">
+                                        <input 
+                                            type="password" 
+                                            id="admin-password" 
+                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-organic-green focus:border-transparent pr-12"
+                                            placeholder="Enter password"
+                                            required
+                                        />
+                                        <button 
+                                            type="button" 
+                                            id="toggle-password"
+                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                        >
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button 
+                                    type="submit" 
+                                    id="admin-login-btn"
+                                    class="w-full bg-organic-brown text-white py-3 rounded-lg hover:bg-opacity-90 transition font-medium"
+                                >
+                                    Login as Admin
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Back to Home -->
+                        <div class="text-center mt-6">
+                            <a href="#home" class="text-sm text-gray-500 hover:text-organic-green transition nav-link">
+                                <i class="fas fa-arrow-left mr-1"></i>Back to Home
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-organic-brown text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <img src="assets/logo.svg" alt="The SOF Logo" class="w-8 h-8" />
+                        <h3 class="text-xl font-bold">The Sustainable Organic Farming</h3>
+                    </div>
+                    <p class="text-gray-300">Premium organic products for a healthier lifestyle. Farm fresh, chemical-free, and sustainably grown.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-300 hover:text-white transition nav-link">Home</a></li>
+                        <li><a href="#products" class="text-gray-300 hover:text-white transition nav-link">Products</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition nav-link">About</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition nav-link">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-600 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2025 The Sustainable Organic Farming. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

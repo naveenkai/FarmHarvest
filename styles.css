@@ -73,6 +73,32 @@
     object-fit: cover;
 }
 
+/* Mobile Menu Styles */
+#mobile-menu {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Ensure responsive breakpoints work correctly */
+@media (min-width: 768px) {
+    #mobile-menu {
+        display: none !important;
+    }
+    
+    .md\:flex {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .hidden.md\:flex {
+        display: none !important;
+    }
+    
+    .md\:hidden {
+        display: block;
+    }
+}
+
 .hidden {
     display: none !important;
 }
