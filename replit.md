@@ -123,7 +123,7 @@ Preferred communication style: Simple, everyday language.
 - **User Profile System**: Complete user authentication with profile photos, personalized greetings, and profile management
 - **Dynamic Content**: Products now load dynamically from database instead of static HTML
 - **Responsive Navigation**: Fixed navigation visibility issues with custom CSS classes for desktop/mobile breakpoints
-- **Company Branding**: Maintained full company name "The Sustainable Organic Farming" across all navigation elements
+- **Company Branding**: Desktop shows full company name on one line, mobile shows "The Sustainable" / "Organic Farming" on two lines
 
 ### Backend Architecture
 - **Technology Stack**: Node.js HTTP server with vanilla JavaScript frontend
