@@ -40,6 +40,11 @@ class ShoppingCart {
             this.toggleCart();
         });
 
+        // Hero cart toggle
+        document.getElementById('hero-cart-toggle').addEventListener('click', () => {
+            this.toggleCart();
+        });
+
         document.getElementById('close-cart').addEventListener('click', () => {
             this.closeCart();
         });
@@ -259,7 +264,7 @@ class ShoppingCart {
 
     updateCartCount() {
         const count = this.items.reduce((sum, item) => sum + item.quantity, 0);
-        const cartCountElements = document.querySelectorAll('#cart-count, #mobile-cart-count');
+        const cartCountElements = document.querySelectorAll('#cart-count, #mobile-cart-count, #hero-cart-count');
         
         cartCountElements.forEach(element => {
             element.textContent = count;
