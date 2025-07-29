@@ -11,6 +11,8 @@ class ShoppingCart {
         this.updateCartCount();
         // Ensure category filters start in default state
         this.resetCategoryFilters();
+        // Initialize hero carousel
+        this.initHeroCarousel();
     }
 
     bindEvents() {
@@ -464,6 +466,63 @@ Thank you for supporting sustainable organic farming! 🌿
     loadCart() {
         const saved = localStorage.getItem('organicFarmCart');
         return saved ? JSON.parse(saved) : [];
+    }
+
+    initHeroCarousel() {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        let currentSlide = 0;
+        let slideInterval;
+
+        // Auto-slide functionality
+        const nextSlide = () => {
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            
+            currentSlide = (currentSlide + 1) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        };
+
+        // Start auto-sliding every 4 seconds
+        const startAutoSlide = () => {
+            slideInterval = setInterval(nextSlide, 4000);
+        };
+
+        startAutoSlide();
+
+        // Manual indicator clicks
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                // Clear the auto-slide timer
+                clearInterval(slideInterval);
+                
+                // Update slides
+                slides[currentSlide].classList.remove('active');
+                indicators[currentSlide].classList.remove('active');
+                
+                currentSlide = index;
+                
+                slides[currentSlide].classList.add('active');
+                indicators[currentSlide].classList.add('active');
+                
+                // Restart auto-sliding after 4 seconds
+                setTimeout(startAutoSlide, 4000);
+            });
+        });
+
+        // Pause on hover
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+            heroSection.addEventListener('mouseenter', () => {
+                clearInterval(slideInterval);
+            });
+            
+            heroSection.addEventListener('mouseleave', () => {
+                startAutoSlide();
+            });
+        }
     }
 }
 

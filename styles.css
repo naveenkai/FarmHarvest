@@ -35,10 +35,34 @@
     min-height: calc(100vh - 300px);
 }
 
+/* Hero Carousel Styles */
 .hero {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    position: relative;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+}
+
+.carousel-indicator.active {
+    background-color: white !important;
+    opacity: 1;
 }
 
 .product-image {

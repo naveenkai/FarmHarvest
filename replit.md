@@ -118,6 +118,7 @@ Preferred communication style: Simple, everyday language.
 - **Enhanced UI**: Added cart button to hero section with organic color scheme matching
 - **Layout Reorganization**: Moved Featured Products section to top of home page (after hero), followed by "Why Choose Our Organic Products" section
 - **Filter Reset Fix**: Improved category filter reset functionality to prevent featured products from staying green after navigation
+- **Hero Carousel**: Added auto-sliding image carousel to hero section featuring organic products (eggs, desi chicken, moringa tree, moringa powder) with smooth transitions and manual indicators
 
 ### Backend Architecture
 - **Technology Stack**: Node.js HTTP server with vanilla JavaScript frontend
