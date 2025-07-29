@@ -52,12 +52,15 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    background-attachment: scroll;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 1.5s ease-in-out;
+    z-index: 1;
 }
 
 .carousel-slide.active {
     opacity: 1;
+    z-index: 2;
 }
 
 .carousel-indicator.active {
