@@ -9,6 +9,8 @@ class ShoppingCart {
         this.bindEvents();
         this.updateCartDisplay();
         this.updateCartCount();
+        // Ensure category filters start in default state
+        this.resetCategoryFilters();
     }
 
     bindEvents() {
@@ -148,16 +150,7 @@ class ShoppingCart {
 
         // Reset category filters when not in products section
         if (sectionId !== 'products') {
-            document.querySelectorAll('.category-filter').forEach(btn => {
-                btn.classList.remove('active', 'bg-organic-green', 'text-white');
-                btn.classList.add('bg-gray-200', 'text-gray-700');
-            });
-            // Reset "All Products" to active
-            const allProductsBtn = document.querySelector('[data-category="all"]');
-            if (allProductsBtn) {
-                allProductsBtn.classList.remove('bg-gray-200', 'text-gray-700');
-                allProductsBtn.classList.add('active', 'bg-organic-green', 'text-white');
-            }
+            this.resetCategoryFilters();
         }
 
         // Close mobile menu
@@ -197,6 +190,26 @@ class ShoppingCart {
                 productsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }, 100);
+    }
+
+    resetCategoryFilters() {
+        // Force reset all category filters to default state
+        document.querySelectorAll('.category-filter').forEach(btn => {
+            // Remove all possible active classes
+            btn.classList.remove('active', 'bg-organic-green', 'text-white');
+            // Add default classes
+            btn.classList.add('bg-gray-200', 'text-gray-700');
+            // Remove any inline styles that might be causing issues
+            btn.style.backgroundColor = '';
+            btn.style.color = '';
+        });
+        
+        // Set "All Products" as active
+        const allProductsBtn = document.querySelector('[data-category="all"]');
+        if (allProductsBtn) {
+            allProductsBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            allProductsBtn.classList.add('active', 'bg-organic-green', 'text-white');
+        }
     }
 
     filterProducts(category) {
