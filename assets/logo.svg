@@ -1,0 +1,69 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#f8f6f0" stroke="#5a8f45" stroke-width="10"/>
+  
+  <!-- Sun rays -->
+  <g stroke="#d4a574" stroke-width="3" stroke-linecap="round">
+    <line x1="100" y1="25" x2="100" y2="15"/>
+    <line x1="130" y1="35" x2="136" y2="29"/>
+    <line x1="150" y1="60" x2="156" y2="54"/>
+    <line x1="165" y1="100" x2="175" y2="100"/>
+    <line x1="150" y1="140" x2="156" y2="146"/>
+    <line x1="130" y1="165" x2="136" y2="171"/>
+    <line x1="100" y1="175" x2="100" y2="185"/>
+    <line x1="70" y1="165" x2="64" y2="171"/>
+    <line x1="50" y1="140" x2="44" y2="146"/>
+    <line x1="35" y1="100" x2="25" y2="100"/>
+    <line x1="50" y1="60" x2="44" y2="54"/>
+    <line x1="70" y1="35" x2="64" y2="29"/>
+  </g>
+  
+  <!-- Sun -->
+  <circle cx="100" cy="45" r="15" fill="#d4a574"/>
+  
+  <!-- Central plant stem -->
+  <rect x="97" y="45" width="6" height="75" fill="#5a8f45"/>
+  
+  <!-- Main plant - center -->
+  <ellipse cx="85" cy="70" rx="10" ry="18" fill="#5a8f45" transform="rotate(-25 85 70)"/>
+  <ellipse cx="115" cy="70" rx="10" ry="18" fill="#5a8f45" transform="rotate(25 115 70)"/>
+  <ellipse cx="82" cy="90" rx="8" ry="14" fill="#5a8f45" transform="rotate(-35 82 90)"/>
+  <ellipse cx="118" cy="90" rx="8" ry="14" fill="#5a8f45" transform="rotate(35 118 90)"/>
+  <ellipse cx="88" cy="105" rx="6" ry="12" fill="#5a8f45" transform="rotate(-20 88 105)"/>
+  <ellipse cx="112" cy="105" rx="6" ry="12" fill="#5a8f45" transform="rotate(20 112 105)"/>
+  
+  <!-- Left side plant -->
+  <g transform="translate(-35, 15)">
+    <rect x="97" y="70" width="4" height="50" fill="#5a8f45"/>
+    <ellipse cx="90" cy="85" rx="7" ry="12" fill="#5a8f45" transform="rotate(-30 90 85)"/>
+    <ellipse cx="106" cy="85" rx="7" ry="12" fill="#5a8f45" transform="rotate(30 106 85)"/>
+    <ellipse cx="88" cy="100" rx="5" ry="10" fill="#5a8f45" transform="rotate(-40 88 100)"/>
+    <ellipse cx="108" cy="100" rx="5" ry="10" fill="#5a8f45" transform="rotate(40 108 100)"/>
+  </g>
+  
+  <!-- Right side plant -->
+  <g transform="translate(35, 15)">
+    <rect x="97" y="70" width="4" height="50" fill="#5a8f45"/>
+    <ellipse cx="90" cy="85" rx="7" ry="12" fill="#5a8f45" transform="rotate(-30 90 85)"/>
+    <ellipse cx="106" cy="85" rx="7" ry="12" fill="#5a8f45" transform="rotate(30 106 85)"/>
+    <ellipse cx="88" cy="100" rx="5" ry="10" fill="#5a8f45" transform="rotate(-40 88 100)"/>
+    <ellipse cx="108" cy="100" rx="5" ry="10" fill="#5a8f45" transform="rotate(40 108 100)"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#5a8f45">THE</text>
+  <text x="100" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#5a8f45">SOF</text>
+  
+  <!-- Ground/soil layers -->
+  <path d="M 20 140 Q 40 138 60 140 T 100 138 T 140 140 T 180 138 L 180 185 L 20 185 Z" fill="#8c6e4a"/>
+  <path d="M 20 150 Q 35 148 50 150 T 85 148 T 120 150 T 155 148 T 180 150 L 180 185 L 20 185 Z" fill="#7a5d3f"/>
+  <path d="M 25 160 Q 45 158 65 160 T 100 158 T 135 160 T 175 158 L 175 185 L 25 185 Z" fill="#6b4a32"/>
+  
+  <!-- Soil texture elements -->
+  <circle cx="45" cy="165" r="1.5" fill="#9c7a5a"/>
+  <circle cx="85" cy="170" r="1" fill="#9c7a5a"/>
+  <circle cx="125" cy="165" r="1.5" fill="#9c7a5a"/>
+  <circle cx="160" cy="170" r="1" fill="#9c7a5a"/>
+  <circle cx="65" cy="175" r="0.8" fill="#9c7a5a"/>
+  <circle cx="140" cy="175" r="0.8" fill="#9c7a5a"/>
+</svg>

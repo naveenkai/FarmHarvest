@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TheOrganicDesiChicken - Farm Fresh Desi Chicken & Eggs</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Navigation links
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    
+                    // Hide all sections
+                    sections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    
+                    // Show target section
+                    document.getElementById(targetId).classList.remove('hidden');
+                    
+                    // Close mobile menu if open
+                    mobileMenu.classList.add('hidden');
+                    
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                });
+            });
+            
+            // Show home section by default
+            document.getElementById('home').classList.remove('hidden');
+        });
+    </script>
+    <style>
+        .bg-organic-green {
+            background-color: #5a8f45;
+        }
+        .bg-light-green {
+            background-color: #e6f0e0;
+        }
+        .text-organic-green {
+            color: #5a8f45;
+        }
+        .bg-organic-brown {
+            background-color: #8c6e4a;
+        }
+        .text-organic-brown {
+            color: #8c6e4a;
+        }
+        .content-section {
+            min-height: calc(100vh - 300px);
+        }
+        .hero {
+            background-image: url('/api/placeholder/1200/500');
+            background-position: center;
+            background-size: cover;
+        }
+        .product-image {
+            height: 200px;
+            object-fit: cover;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-2xl font-bold text-organic-green">TheOrganicDesiChicken</div>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Home</a>
+                <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Products</a>
+                <a href="#order" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Order</a>
+                <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
+                <a href="#order" class="bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition nav-link">Pre-Order Now</a>
+            </div>
+            <div class="block md:hidden">
+                <button id="mobile-menu-button" class="text-organic-brown">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden bg-white shadow-md container mx-auto px-4 py-2">
+            <div class="flex flex-col space-y-3">
+                <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Home</a>
+                <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Products</a>
+                <a href="#order" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Order</a>
+                <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
+                <a href="#order" class="bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition text-center nav-link">Pre-Order Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Sections -->
+    <div id="content" class="content-section">
+        <!-- Home Section -->
+        <section id="home" class="block">
+            <!-- Hero Section -->
+            <div class="hero relative py-20">
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+                <div class="container mx-auto px-4 relative">
+                    <div class="max-w-2xl text-white">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-4">Farm Fresh Desi Chicken</h1>
+                        <p class="text-xl mb-6">Organic, Hygienic, and Naturally Raised</p>
+                        <div class="flex items-center space-x-2 mb-6">
+                            <span class="px-3 py-1 bg-white text-organic-green rounded-full">Farm Fresh</span>
+                            <span class="px-3 py-1 bg-white text-organic-green rounded-full">Organic Feed</span>
+                            <span class="px-3 py-1 bg-white text-organic-green rounded-full">Hygienic Processing</span>
+                        </div>
+                        <a href="#products" class="inline-block bg-organic-green text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition nav-link">See Our Products</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-organic-brown mb-12">Why Choose Us</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="bg-light-green p-6 rounded-lg text-center">
+                            <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-organic-brown">100% Organic</h3>
+                            <p class="text-gray-700">Our chickens are raised on organic feed without any antibiotics or hormones.</p>
+                        </div>
+                        <div class="bg-light-green p-6 rounded-lg text-center">
+                            <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-organic-brown">Hygienically Processed</h3>
+                            <p class="text-gray-700">Our processing facility maintains the highest standards of cleanliness and food safety.</p>
+                        </div>
+                        <div class="bg-light-green p-6 rounded-lg text-center">
+                            <div class="bg-organic-green text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-organic-brown">Fast Delivery</h3>
+                            <p class="text-gray-700">Fresh delivery within 5km radius of Lanjigarh during morning and evening slots.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Info -->
+            <div class="py-16 bg-light-green">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-organic-brown mb-12">Our Service</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-4 text-organic-brown">Delivery Areas</h3>
+                            <p class="text-gray-700 mb-4">We currently deliver within a 5km radius of Lanjigarh.</p>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <p class="font-bold text-organic-green">Extra Delivery Charges:</p>
+                                <p class="text-gray-700">₹20–₹30 based on distance</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md">
+                            <h3 class="text-xl font-bold mb-4 text-organic-brown">Delivery Timings</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <div class="bg-organic-green text-white w-10 h-10 rounded-full flex items-center justify-center mr-4">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-organic-brown">Morning Slot</p>
+                                        <p class="text-gray-700">7 AM – 12 PM</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="bg-organic-green text-white w-10 h-10 rounded-full flex items-center justify-center mr-4">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-organic-brown">Evening Slot</p>
+                                        <p class="text-gray-700">3 PM – 7 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Window -->
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <div class="max-w-2xl mx-auto bg-light-green p-8 rounded-lg shadow-md text-center">
+                        <h3 class="text-2xl font-bold text-organic-brown mb-4">Pre-order Window</h3>
+                        <p class="text-gray-700 mb-6">Pre-orders are open Monday to Saturday till 5 PM. Get a discount on your order when you pre-order!</p>
+                        <div class="inline-block bg-organic-green text-white px-6 py-3 rounded-lg">
+                            <span class="block font-bold text-lg">₹50/kg Savings</span>
+                            <span class="text-sm">on pre-orders</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="hidden">
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-organic-brown mb-12">Our Products</h2>
+                    
+                    <!-- Product Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <!-- Desi Sonali Chicken -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                            <img src="/api/placeholder/600/400" alt="Desi Sonali Chicken" class="w-full product-image">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Desi Sonali Chicken</h3>
+                                <div class="flex justify-between mb-4">
+                                    <div>
+                                        <p class="text-organic-green font-bold">Pre-Order Price</p>
+                                        <p class="text-2xl font-bold">₹500/kg</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-600 font-bold">Instant Order</p>
+                                        <p class="text-xl text-gray-700">₹550/kg</p>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="text-gray-700">Available as live or processed</p>
+                                    <p class="text-gray-700">Minimum Order: 1 kg</p>
+                                </div>
+                                <div class="flex flex-col space-y-3">
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2">Select Weight</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green">
+                                            <option value="1">1 kg</option>
+                                            <option value="2">2 kg</option>
+                                            <option value="3">3 kg</option>
+                                            <option value="4">4 kg</option>
+                                            <option value="5">5 kg</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2">Processing</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green">
+                                            <option value="live">Live</option>
+                                            <option value="processed">Processed</option>
+                                        </select>
+                                    </div>
+                                    <button class="bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition mt-2">Add to Order</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Desi Eggs -->
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
+                            <img src="/api/placeholder/600/400" alt="Desi Eggs" class="w-full product-image">
+                            <div class="p-6">
+                                <h3 class="text-xl font-bold text-organic-brown mb-2">Desi Eggs</h3>
+                                <div class="flex justify-between mb-4">
+                                    <div>
+                                        <p class="text-organic-green font-bold">Price</p>
+                                        <p class="text-2xl font-bold">₹120/dozen</p>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="text-gray-700">Farm fresh organic eggs</p>
+                                    <p class="text-gray-700">Rich in nutrients and flavor</p>
+                                </div>
+                                <div class="flex flex-col space-y-3">
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2">Select Quantity</label>
+                                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green">
+                                            <option value="6">Half Dozen (6 eggs)</option>
+                                            <option value="12">1 Dozen (12 eggs)</option>
+                                            <option value="24">2 Dozens (24 eggs)</option>
+                                            <option value="30">30 eggs (tray)</option>
+                                        </select>
+                                    </div>
+                                    <button class="bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition mt-2">Add to Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-12">
+                        <a href="#order" class="bg-organic-brown text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition nav-link">Proceed to Order</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Form Section -->
+        <section id="order" class="hidden">
+            <div class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center text-organic-brown mb-12">Place Your Order</h2>
+                    
+                    <div class="max-w-3xl mx-auto bg-light-green p-8 rounded-lg shadow-md">
+                        <form id="order-form">
+                            <!-- Customer Information -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-organic-brown mb-4">Customer Information</h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Full Name*</label>
+                                        <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="phone">Mobile Number*</label>
+                                        <input type="tel" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email Address*</label>
+                                        <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delivery Information -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-organic-brown mb-4">Delivery Information</h3>
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2" for="address">Full Address*</label>
+                                        <textarea id="address" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green" required></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-gray-700 text-sm font-bold mb-2">Delivery Time Slot*</label>
+                                        <div class="flex flex-wrap gap-4">
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" name="time_slot" value="morning" class="form-radio text-organic-green" checked>
+                                                <span class="ml-2">Morning (7 AM – 12 PM)</span>
+                                            </label>
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" name="time_slot" value="evening" class="form-radio text-organic-green">
+                                                <span class="ml-2">Evening (3 PM – 7 PM)</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Order Details -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-organic-brown mb-4">Order Details</h3>
+                                
+                                <!-- Chicken Order -->
+                                <div class="bg-white p-4 rounded-md mb-4 shadow-sm">
+                                    <h4 class="font-bold text-organic-brown mb-2">Desi Sonali Chicken</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 text-sm font-bold mb-2">Type</label>
+                                            <select id="chicken-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green">
+                                                <option value="live">Live</option>
+                                                <option value="processed">Processed</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 text-sm font-bold mb-2">Weight (kg)</label>
+                                            <select id="chicken-weight" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green">
+                                                <option value="0">0 (None)</option>
+                                                <option value="1">1 kg</option>
+                                                <option value="2">2 kg</option>
+                                                <option value="3">3 kg</option>
+                                                <option value="4">4 kg</option>
+                                                <option value="5">5 kg</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-700 text-sm font-bold mb-2">Order Type</label>
+                                            <select id="chicken-order-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green">
+                                                <option value="pre-order">Pre-Order (₹500/kg)</option>
+                                                <option value="instant">Instant (₹550/kg)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 text-right">
+                                        <span class="font-bold text-organic-green">Subtotal: <span id="chicken-subtotal">₹0</span></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Eggs Order -->
+                                <div class="bg-white p-4 rounded-md mb-4 shadow-sm">
+                                    <h4 class="font-bold text-organic-brown mb-2">Desi Eggs</h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-gray-700 text-sm font-bold mb-2">Quantity</label>
+                                            <select id="eggs-quantity" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-organic-green">
+                                                <option value="0">0 (None)</option>
+                                                <option value="6">Half Dozen (6 eggs)</option>
+                                                <option value="12">1 Dozen (12 eggs)</option>
+                                                <option value="24">2 Dozens (24 eggs)</option>
+                                                <option value="30">30 eggs (tray)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 text-right">
+                                        <span class="font-bold text-organic-green">Subtotal: <span id="eggs-subtotal">₹0</span></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Order Summary -->
+                                <div class="bg-white p-4 rounded-md shadow-sm">
+                                    <h4 class="font-bold text-organic-brown mb-4">Order Summary</h4>
+                                    <div class="space-y-2 mb-4">
+                                        <div class="flex justify-between">
+                                            <span>Chicken:</span>
+                                            <span id="summary-chicken">₹0</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Eggs:</span>
+                                            <span id="summary-eggs">₹0</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Delivery Charge:</span>
+                                            <span id="delivery-charge">₹0</span>
+                                        </div>
+                                        <div class="border-t pt-2 flex justify-between font-bold text-lg">
+                                            <span>Total:</span>
+                                            <span id="order-total" class="text-organic-green">₹0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Options -->
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-organic-brown mb-4">Payment Method</h3>
+                                <div class="space-y-3">
+                                    <label class="block bg-white p-3 rounded-md shadow-sm border border-gray-200 hover:border-organic-green cursor-pointer">
+                                        <div class="flex items-center">
+                                            <input type="radio" name="payment_method" value="online" class="form-radio text-organic-green" checked>
+                                            <span class="ml-2 font-bold">Online Payment</span>
+                                        </div>
+                                        <div class="ml-6 mt-1 text-sm text-gray-600">Pay securely using UPI or Card</div>
+                                    </label>
+                                    
+                                    <label class="block bg-white p-3 rounded-md shadow-sm border border-gray-200 hover:border-organic-green cursor-pointer">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center">
+                                                <input type="radio" name="payment_method" value="cod" class="form-radio text-organic-green">
+                                                <span class="ml-2 font-bold">Cash on Delivery</span>
+                                            </div>
+                                            <span class="text-sm text-organic-green">+₹30 charge</span>
+                                        </div>
+                                        <div class="ml-6 mt-1 text-sm text-gray-600">Pay with cash when your order arrives</div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" id="place-order-btn" class="bg-organic-green text-white px-8 py-3 rounded-lg hover:bg-opacity-90 transition text-lg font-bold">Place Order</button>
+                                <p class="mt-2 text-sm text-gray-600">You will receive an email confirmation after placing your
