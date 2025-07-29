@@ -95,18 +95,18 @@
 }
 
 /* Responsive breakpoints */
-@media (min-width: 1024px) {
-    .lg\:hidden {
+@media (min-width: 768px) {
+    .md\:hidden {
         display: none !important;
     }
     
-    .lg\:block {
+    .md\:block {
         display: block !important;
     }
 }
 
-@media (max-width: 1023px) {
-    .hidden.lg\:block {
+@media (max-width: 767px) {
+    .hidden.md\:block {
         display: none !important;
     }
 }
