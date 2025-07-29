@@ -116,6 +116,8 @@ Preferred communication style: Simple, everyday language.
 - **Backend Integration**: Added Node.js server with authentication capabilities
 - **Email Integration**: SendGrid integration for OTP-based authentication
 - **Enhanced UI**: Added cart button to hero section with organic color scheme matching
+- **Layout Reorganization**: Moved Featured Products section to top of home page (after hero), followed by "Why Choose Our Organic Products" section
+- **Filter Reset Fix**: Improved category filter reset functionality to prevent featured products from staying green after navigation
 
 ### Backend Architecture
 - **Technology Stack**: Node.js HTTP server with vanilla JavaScript frontend
