@@ -146,6 +146,20 @@ class ShoppingCart {
             targetSection.classList.remove('hidden');
         }
 
+        // Reset category filters when not in products section
+        if (sectionId !== 'products') {
+            document.querySelectorAll('.category-filter').forEach(btn => {
+                btn.classList.remove('active', 'bg-organic-green', 'text-white');
+                btn.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            // Reset "All Products" to active
+            const allProductsBtn = document.querySelector('[data-category="all"]');
+            if (allProductsBtn) {
+                allProductsBtn.classList.remove('bg-gray-200', 'text-gray-700');
+                allProductsBtn.classList.add('active', 'bg-organic-green', 'text-white');
+            }
+        }
+
         // Close mobile menu
         const mobileMenu = document.getElementById('mobile-menu');
         if (mobileMenu) {
