@@ -16,12 +16,42 @@
                 <img src="assets/logo.svg" alt="The SOF Logo" class="w-12 h-12" />
                 <div class="text-2xl font-bold text-organic-green">The Sustainable Organic Farming</div>
             </div>
+            
+            <!-- User Profile Section -->
+            <div id="user-profile-section" class="hidden flex items-center space-x-4">
+                <div class="text-right">
+                    <div id="user-greeting" class="text-sm text-organic-brown font-medium"></div>
+                    <div id="user-name" class="text-lg font-bold text-organic-green"></div>
+                </div>
+                <div class="relative">
+                    <button id="profile-menu-btn" class="w-10 h-10 rounded-full overflow-hidden border-2 border-organic-green hover:border-organic-brown transition">
+                        <img id="user-profile-pic" src="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=40" alt="Profile" class="w-full h-full object-cover">
+                    </button>
+                    <!-- Profile Dropdown -->
+                    <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                        <div class="py-2">
+                            <button id="edit-profile-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-user mr-2"></i>Edit Profile
+                            </button>
+                            <button id="change-photo-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-camera mr-2"></i>Change Photo
+                            </button>
+                            <hr class="my-1">
+                            <button id="user-logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="hidden md:flex space-x-8 items-center">
                 <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Home</a>
                 <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Products</a>
                 <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">About</a>
                 <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
-                <a href="#auth" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Login</a>
+                <button id="user-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">
+                    <i class="fas fa-user mr-1"></i>Login
+                </button>
                 <button id="admin-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">Admin</button>
                 <button id="cart-toggle" class="relative bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
                     <i class="fas fa-shopping-cart mr-2"></i>Cart
@@ -43,7 +73,9 @@
                 <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Products</a>
                 <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">About</a>
                 <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
-                <a href="#auth" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Login</a>
+                <button id="mobile-user-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">
+                    <i class="fas fa-user mr-1"></i>Login
+                </button>
                 <button id="mobile-admin-btn" class="text-organic-brown hover:text-organic-green transition duration-300">Admin</button>
                 <button id="mobile-cart-toggle" class="bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition text-center">
                     <i class="fas fa-shopping-cart mr-2"></i>Cart (<span id="mobile-cart-count">0</span>)
@@ -110,6 +142,196 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Login Modal -->
+    <div id="user-login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Login / Register</h3>
+                    <button id="close-user-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Tab Buttons -->
+                <div class="flex mb-6 border-b">
+                    <button id="login-tab" class="flex-1 py-2 text-center font-medium border-b-2 border-organic-green text-organic-green">Login</button>
+                    <button id="register-tab" class="flex-1 py-2 text-center font-medium text-gray-500 hover:text-organic-green">Register</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="login-form-container">
+                    <form id="user-login-form">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="login-email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                            <input type="text" id="login-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-organic-green text-white py-2 rounded-lg hover:bg-opacity-90 transition">
+                            Send OTP
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Register Form -->
+                <div id="register-form-container" class="hidden">
+                    <form id="user-register-form">
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="register-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" id="register-email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone (Optional)</label>
+                            <input type="tel" id="register-phone" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green">
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-organic-green text-white py-2 rounded-lg hover:bg-opacity-90 transition">
+                            Register & Send OTP
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Verification Modal -->
+    <div id="otp-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Verify OTP</h3>
+                    <button id="close-otp-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="otp-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Enter OTP sent to your email</label>
+                        <input type="text" id="otp-input" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green text-center text-2xl letter-spacing-wide" maxlength="6" required>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-organic-green text-white py-2 rounded-lg hover:bg-opacity-90 transition">
+                        Verify OTP
+                    </button>
+                </form>
+                
+                <div class="mt-4 text-center">
+                    <button id="resend-otp" class="text-organic-green hover:underline text-sm">Resend OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div id="profile-edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Edit Profile</h3>
+                    <button id="close-profile-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="profile-edit-form">
+                    <div class="mb-4 text-center">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-4 border-organic-green">
+                            <img id="preview-profile-pic" src="" alt="Profile Preview" class="w-full h-full object-cover">
+                        </div>
+                        <button type="button" id="change-profile-pic-btn" class="text-organic-green hover:underline text-sm">
+                            <i class="fas fa-camera mr-1"></i>Change Photo
+                        </button>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="edit-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="edit-email" class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100" readonly>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                        <input type="tel" id="edit-phone" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green">
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancel-profile-edit" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-organic-green text-white rounded-lg hover:bg-opacity-90 transition">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Selection Modal -->
+    <div id="photo-selection-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Choose Profile Photo</h3>
+                    <button id="close-photo-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-4 mb-6">
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=80" alt="Avatar 1" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=059669&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=059669&color=fff&size=80" alt="Avatar 2" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=0f766e&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=0f766e&color=fff&size=80" alt="Avatar 3" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=92400e&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=92400e&color=fff&size=80" alt="Avatar 4" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=be185d&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=be185d&color=fff&size=80" alt="Avatar 5" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=1e40af&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=1e40af&color=fff&size=80" alt="Avatar 6" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=7c2d12&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=7c2d12&color=fff&size=80" alt="Avatar 7" class="w-full h-16 object-cover rounded">
+                    </div>
+                    <div class="photo-option cursor-pointer p-2 border-2 border-transparent hover:border-organic-green rounded-lg transition" data-photo="https://ui-avatars.com/api/?name=User&background=374151&color=fff&size=80">
+                        <img src="https://ui-avatars.com/api/?name=User&background=374151&color=fff&size=80" alt="Avatar 8" class="w-full h-16 object-cover rounded">
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-gray-600 mb-4">Or enter a custom image URL:</p>
+                    <input type="url" id="custom-photo-url" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green mb-4" placeholder="https://example.com/photo.jpg">
+                    <button id="use-custom-photo" class="bg-organic-brown text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
+                        Use Custom Photo
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -106,6 +106,16 @@ class ShoppingCart {
             });
         }
 
+        // User login functionality
+        const userLoginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
+        userLoginBtns.forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    this.showUserLoginModal();
+                });
+            }
+        });
+
         // Admin login functionality
         const adminLoginBtns = document.querySelectorAll('#admin-login-btn, #mobile-admin-btn');
         adminLoginBtns.forEach(btn => {
@@ -464,6 +474,372 @@ class ShoppingCart {
             console.error('Admin login error:', error);
             showNotification('Login failed. Please try again.', 'error');
         }
+    }
+
+    // User Profile Methods
+    showUserLoginModal() {
+        const modal = document.getElementById('user-login-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            this.switchToLoginTab();
+        }
+    }
+
+    hideUserLoginModal() {
+        const modal = document.getElementById('user-login-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            this.resetUserForms();
+        }
+    }
+
+    showOTPModal() {
+        this.hideUserLoginModal();
+        const modal = document.getElementById('otp-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    hideOTPModal() {
+        const modal = document.getElementById('otp-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('otp-form').reset();
+        }
+    }
+
+    showProfileEditModal() {
+        const modal = document.getElementById('profile-edit-modal');
+        if (modal) {
+            this.populateProfileEditForm();
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        this.hideProfileDropdown();
+    }
+
+    hideProfileEditModal() {
+        const modal = document.getElementById('profile-edit-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    showPhotoSelectionModal() {
+        const modal = document.getElementById('photo-selection-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        this.hideProfileEditModal();
+    }
+
+    hidePhotoSelectionModal() {
+        const modal = document.getElementById('photo-selection-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('custom-photo-url').value = '';
+        }
+    }
+
+    hideProfileDropdown() {
+        const dropdown = document.getElementById('profile-dropdown');
+        if (dropdown) {
+            dropdown.classList.add('hidden');
+        }
+    }
+
+    switchToLoginTab() {
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form-container');
+        const registerForm = document.getElementById('register-form-container');
+
+        if (loginTab && registerTab && loginForm && registerForm) {
+            loginTab.classList.add('border-organic-green', 'text-organic-green');
+            loginTab.classList.remove('text-gray-500');
+            
+            registerTab.classList.remove('border-organic-green', 'text-organic-green');
+            registerTab.classList.add('text-gray-500');
+            
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+        }
+    }
+
+    switchToRegisterTab() {
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form-container');
+        const registerForm = document.getElementById('register-form-container');
+
+        if (loginTab && registerTab && loginForm && registerForm) {
+            registerTab.classList.add('border-organic-green', 'text-organic-green', 'border-b-2');
+            registerTab.classList.remove('text-gray-500');
+            
+            loginTab.classList.remove('border-organic-green', 'text-organic-green', 'border-b-2');
+            loginTab.classList.add('text-gray-500');
+            
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        }
+    }
+
+    resetUserForms() {
+        const forms = ['user-login-form', 'user-register-form'];
+        forms.forEach(formId => {
+            const form = document.getElementById(formId);
+            if (form) form.reset();
+        });
+    }
+
+    async handleUserLogin() {
+        const email = document.getElementById('login-email').value;
+        const name = document.getElementById('login-name').value;
+        
+        try {
+            const otp = this.generateOTP();
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, otp })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                this.currentUserData = { email, name, type: 'login' };
+                this.showOTPModal();
+                showNotification('OTP sent to your email!', 'success');
+            } else {
+                showNotification(data.error || 'Failed to send OTP', 'error');
+            }
+        } catch (error) {
+            console.error('User login error:', error);
+            showNotification('Login failed. Please try again.', 'error');
+        }
+    }
+
+    async handleUserRegister() {
+        const name = document.getElementById('register-name').value;
+        const email = document.getElementById('register-email').value;
+        const phone = document.getElementById('register-phone').value;
+        
+        try {
+            const otp = this.generateOTP();
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, otp })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                this.currentUserData = { email, name, phone, type: 'register' };
+                this.showOTPModal();
+                showNotification('OTP sent to your email!', 'success');
+            } else {
+                showNotification(data.error || 'Failed to send OTP', 'error');
+            }
+        } catch (error) {
+            console.error('User register error:', error);
+            showNotification('Registration failed. Please try again.', 'error');
+        }
+    }
+
+    async handleOTPVerification() {
+        const otp = document.getElementById('otp-input').value;
+        
+        if (!this.currentUserData) {
+            showNotification('Session expired. Please try again.', 'error');
+            this.hideOTPModal();
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    email: this.currentUserData.email,
+                    otp: otp
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                this.handleSuccessfulLogin(data);
+            } else {
+                showNotification(data.error || 'Invalid OTP', 'error');
+            }
+        } catch (error) {
+            console.error('OTP verification error:', error);
+            showNotification('Verification failed. Please try again.', 'error');
+        }
+    }
+
+    handleSuccessfulLogin(data) {
+        const userData = {
+            email: this.currentUserData.email,
+            name: this.currentUserData.name,
+            phone: this.currentUserData.phone || '',
+            profilePic: this.generateDefaultProfilePic(this.currentUserData.name),
+            sessionId: data.sessionId
+        };
+
+        // Store user data
+        localStorage.setItem('userData', JSON.stringify(userData));
+        document.cookie = `sessionId=${data.sessionId}; path=/`;
+
+        // Show user profile
+        this.displayUserProfile(userData);
+        this.hideOTPModal();
+        
+        showNotification(`Welcome ${userData.name}!`, 'success');
+        this.currentUserData = null;
+    }
+
+    displayUserProfile(userData) {
+        // Update profile section
+        const userProfileSection = document.getElementById('user-profile-section');
+        const userGreeting = document.getElementById('user-greeting');
+        const userName = document.getElementById('user-name');
+        const userProfilePic = document.getElementById('user-profile-pic');
+        
+        if (userProfileSection && userGreeting && userName && userProfilePic) {
+            userGreeting.textContent = this.getGreeting();
+            userName.textContent = userData.name;
+            userProfilePic.src = userData.profilePic;
+            userProfileSection.classList.remove('hidden');
+        }
+
+        // Hide login buttons
+        const loginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
+        loginBtns.forEach(btn => {
+            if (btn) btn.style.display = 'none';
+        });
+    }
+
+    getGreeting() {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good Morning!';
+        if (hour < 17) return 'Good Afternoon!';
+        return 'Good Evening!';
+    }
+
+    generateDefaultProfilePic(name) {
+        const colors = ['4ade80', '059669', '0f766e', '92400e', 'be185d', '1e40af', '7c2d12', '374151'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${randomColor}&color=fff&size=40`;
+    }
+
+    generateOTP() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    async resendOTP() {
+        if (!this.currentUserData) return;
+        
+        try {
+            const otp = this.generateOTP();
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: this.currentUserData.email,
+                    name: this.currentUserData.name,
+                    otp: otp
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                showNotification('OTP resent successfully!', 'success');
+            } else {
+                showNotification('Failed to resend OTP', 'error');
+            }
+        } catch (error) {
+            showNotification('Failed to resend OTP', 'error');
+        }
+    }
+
+    populateProfileEditForm() {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        document.getElementById('edit-name').value = userData.name || '';
+        document.getElementById('edit-email').value = userData.email || '';
+        document.getElementById('edit-phone').value = userData.phone || '';
+        document.getElementById('preview-profile-pic').src = userData.profilePic || '';
+    }
+
+    async handleProfileUpdate() {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const updatedData = {
+            ...userData,
+            name: document.getElementById('edit-name').value,
+            phone: document.getElementById('edit-phone').value
+        };
+
+        // Update local storage
+        localStorage.setItem('userData', JSON.stringify(updatedData));
+        
+        // Update display
+        this.displayUserProfile(updatedData);
+        this.hideProfileEditModal();
+        
+        showNotification('Profile updated successfully!', 'success');
+    }
+
+    selectProfilePhoto(photoUrl) {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        userData.profilePic = photoUrl;
+        
+        // Update local storage
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        // Update all profile pictures
+        const profilePics = document.querySelectorAll('#user-profile-pic, #preview-profile-pic');
+        profilePics.forEach(pic => {
+            if (pic) pic.src = photoUrl;
+        });
+        
+        this.hidePhotoSelectionModal();
+        showNotification('Profile photo updated!', 'success');
+    }
+
+    checkUserSession() {
+        const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        if (userData && userData.sessionId) {
+            this.displayUserProfile(userData);
+        }
+    }
+
+    handleUserLogout() {
+        // Clear user data
+        localStorage.removeItem('userData');
+        document.cookie = 'sessionId=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        
+        // Hide profile section
+        const userProfileSection = document.getElementById('user-profile-section');
+        if (userProfileSection) {
+            userProfileSection.classList.add('hidden');
+        }
+        
+        // Show login buttons
+        const loginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
+        loginBtns.forEach(btn => {
+            if (btn) btn.style.display = 'block';
+        });
+        
+        this.hideProfileDropdown();
+        showNotification('Logged out successfully!', 'success');
     }
 
     filterProducts(category) {
