@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - The Sustainable Organic Farming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Admin Navigation -->
+    <nav class="bg-organic-brown text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Admin Panel - Product Management</h1>
+            <div class="flex items-center space-x-4">
+                <span id="admin-name">Admin</span>
+                <button id="logout-btn" class="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-6">
+        <!-- Section Tabs -->
+        <div class="mb-8">
+            <div class="flex space-x-4 border-b">
+                <button class="admin-tab active px-6 py-3 font-medium border-b-2 border-organic-green text-organic-green" data-section="products">
+                    All Products
+                </button>
+                <button class="admin-tab px-6 py-3 font-medium text-gray-600 hover:text-organic-green" data-section="featured">
+                    Featured Products
+                </button>
+                <button class="admin-tab px-6 py-3 font-medium text-gray-600 hover:text-organic-green" data-section="hero">
+                    Hero Carousel
+                </button>
+            </div>
+        </div>
+
+        <!-- Add Product Button -->
+        <div class="mb-6">
+            <button id="add-product-btn" class="bg-organic-green text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition">
+                <i class="fas fa-plus mr-2"></i>Add New Product
+            </button>
+        </div>
+
+        <!-- Product Management Sections -->
+        <div id="products-section" class="admin-section">
+            <h2 class="text-2xl font-bold text-organic-brown mb-6">Manage All Products</h2>
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+
+        <div id="featured-section" class="admin-section hidden">
+            <h2 class="text-2xl font-bold text-organic-brown mb-6">Manage Featured Products</h2>
+            <div id="featured-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Featured products will be loaded here -->
+            </div>
+        </div>
+
+        <div id="hero-section" class="admin-section hidden">
+            <h2 class="text-2xl font-bold text-organic-brown mb-6">Manage Hero Carousel Images</h2>
+            <div id="hero-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Hero images will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 id="modal-title" class="text-xl font-bold text-organic-brown">Add New Product</h3>
+                        <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form id="product-form">
+                        <input type="hidden" id="product-id">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
+                                <input type="text" id="product-name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                <select id="product-category" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                                    <option value="">Select Category</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="moringa">Moringa Products</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Price</label>
+                                <input type="number" id="product-price" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Unit</label>
+                                <select id="product-unit" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                                    <option value="kg">kg</option>
+                                    <option value="g">g</option>
+                                    <option value="piece">piece</option>
+                                    <option value="bunch">bunch</option>
+                                    <option value="packet">packet</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Stock</label>
+                                <input type="number" id="product-stock" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea id="product-description" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required></textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                            <input type="url" id="product-image" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="flex items-center">
+                                <input type="checkbox" id="product-featured" class="mr-2">
+                                <span class="text-sm font-medium text-gray-700">Featured Product</span>
+                            </label>
+                        </div>
+                        
+                        <div class="flex justify-end space-x-4">
+                            <button type="button" id="cancel-btn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-6 py-2 bg-organic-green text-white rounded-lg hover:bg-opacity-90 transition">
+                                Save Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

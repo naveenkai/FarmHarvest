@@ -22,6 +22,7 @@
                 <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">About</a>
                 <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
                 <a href="#auth" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Login</a>
+                <button id="admin-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">Admin</button>
                 <button id="cart-toggle" class="relative bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
                     <i class="fas fa-shopping-cart mr-2"></i>Cart
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hidden">0</span>
@@ -43,6 +44,7 @@
                 <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">About</a>
                 <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
                 <a href="#auth" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Login</a>
+                <button id="mobile-admin-btn" class="text-organic-brown hover:text-organic-green transition duration-300">Admin</button>
                 <button id="mobile-cart-toggle" class="bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition text-center">
                     <i class="fas fa-shopping-cart mr-2"></i>Cart (<span id="mobile-cart-count">0</span>)
                 </button>
@@ -76,6 +78,41 @@
 
     <!-- Cart Overlay -->
     <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-organic-brown">Admin Login</h3>
+                    <button id="close-admin-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="admin-login-form">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Admin ID</label>
+                        <input type="text" id="admin-id" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="admin-password" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-organic-green" required>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancel-admin-login" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-organic-green text-white rounded-lg hover:bg-opacity-90 transition">
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Content Sections -->
     <div id="content" class="content-section">

@@ -5,7 +5,7 @@ class ShoppingCart {
         this.init();
     }
 
-    init() {
+    async init() {
         this.bindEvents();
         this.updateCartDisplay();
         this.updateCartCount();
@@ -13,6 +13,26 @@ class ShoppingCart {
         this.resetCategoryFilters();
         // Initialize hero carousel
         this.initHeroCarousel();
+        // Load products from database
+        await this.loadProducts();
+    }
+
+    async loadProducts() {
+        try {
+            const response = await fetch('/api/products');
+            if (response.ok) {
+                this.products = await response.json();
+                this.renderProducts();
+                this.renderFeaturedProducts();
+                this.updateProductEventListeners();
+            } else {
+                console.error('Failed to load products');
+                showNotification('Failed to load products', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading products:', error);
+            showNotification('Error loading products', 'error');
+        }
     }
 
     bindEvents() {
@@ -72,23 +92,71 @@ class ShoppingCart {
             this.closeCart();
         });
 
+        // Checkout button
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            this.checkout();
+        });
+
+        // Contact form
+        const contactForm = document.querySelector('#contact form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleContactForm(contactForm);
+            });
+        }
+
+        // Admin login functionality
+        const adminLoginBtns = document.querySelectorAll('#admin-login-btn, #mobile-admin-btn');
+        adminLoginBtns.forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    this.showAdminLoginModal();
+                });
+            }
+        });
+
+        // Admin login modal events
+        const adminLoginModal = document.getElementById('admin-login-modal');
+        const closeAdminModal = document.getElementById('close-admin-modal');
+        const cancelAdminLogin = document.getElementById('cancel-admin-login');
+        const adminLoginForm = document.getElementById('admin-login-form');
+
+        if (closeAdminModal) {
+            closeAdminModal.addEventListener('click', () => {
+                this.hideAdminLoginModal();
+            });
+        }
+
+        if (cancelAdminLogin) {
+            cancelAdminLogin.addEventListener('click', () => {
+                this.hideAdminLoginModal();
+            });
+        }
+
+        if (adminLoginForm) {
+            adminLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleAdminLogin();
+            });
+        }
+
+        if (adminLoginModal) {
+            adminLoginModal.addEventListener('click', (e) => {
+                if (e.target.id === 'admin-login-modal') {
+                    this.hideAdminLoginModal();
+                }
+            });
+        }
+
+        this.updateProductEventListeners();
+    }
+
+    updateProductEventListeners() {
         // Add to cart buttons
         document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const productData = {
-                    id: button.dataset.id,
-                    name: button.dataset.name,
-                    price: parseFloat(button.dataset.price),
-                    unit: button.dataset.unit,
-                    image: button.dataset.image
-                };
-                
-                const quantityInput = button.closest('.product-card').querySelector('.quantity-input');
-                const quantity = parseInt(quantityInput.value);
-                
-                this.addToCart(productData, quantity);
-                this.showAddedFeedback(button);
-            });
+            button.removeEventListener('click', this.handleAddToCart);
+            button.addEventListener('click', this.handleAddToCart.bind(this));
         });
 
         // Quantity controls
@@ -122,19 +190,149 @@ class ShoppingCart {
                 button.classList.add('active', 'bg-organic-green', 'text-white');
             });
         });
+    }
 
-        // Checkout button
-        document.getElementById('checkout-btn').addEventListener('click', () => {
-            this.checkout();
+    handleAddToCart(e) {
+        const button = e.target;
+        const productData = {
+            id: button.dataset.id,
+            name: button.dataset.name,
+            price: parseFloat(button.dataset.price),
+            unit: button.dataset.unit,
+            image: button.dataset.image
+        };
+        
+        const quantityInput = button.closest('.product-card').querySelector('.quantity-input');
+        const quantity = parseInt(quantityInput.value);
+        
+        this.addToCart(productData, quantity);
+        this.showAddedFeedback(button);
+    }
+
+    renderProducts() {
+        const productContainers = [
+            { id: 'vegetables-grid', category: 'vegetables' },
+            { id: 'fruits-grid', category: 'fruits' }, 
+            { id: 'moringa-grid', category: 'moringa' }
+        ];
+
+        productContainers.forEach(container => {
+            const grid = document.getElementById(container.id);
+            if (grid) {
+                const categoryProducts = this.products.filter(p => p.category === container.category);
+                grid.innerHTML = '';
+                
+                categoryProducts.forEach(product => {
+                    const productCard = this.createProductCard(product);
+                    grid.appendChild(productCard);
+                });
+            }
         });
+    }
 
-        // Contact form
-        const contactForm = document.querySelector('#contact form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.handleContactForm(contactForm);
+    renderFeaturedProducts() {
+        const featuredGrid = document.getElementById('featured-products-grid');
+        if (!featuredGrid) return;
+
+        const featuredProducts = this.products.filter(p => p.featured);
+        featuredGrid.innerHTML = '';
+
+        featuredProducts.forEach(product => {
+            const productCard = this.createFeaturedProductCard(product);
+            featuredGrid.appendChild(productCard);
+        });
+    }
+
+    createProductCard(product) {
+        const card = document.createElement('div');
+        card.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300';
+        
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-organic-brown mb-2">${product.name}</h3>
+                <p class="text-gray-600 text-sm mb-3">${product.description}</p>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl font-bold text-organic-green">₹${product.price}/${product.unit}</span>
+                    <span class="text-sm text-gray-500">Stock: ${product.stock}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <button class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-l px-2 py-1" data-action="decrease">-</button>
+                        <input type="number" class="quantity-input w-16 text-center border-t border-b border-gray-200 py-1" min="1" max="10" value="1">
+                        <button class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-r px-2 py-1" data-action="increase">+</button>
+                    </div>
+                    <button class="add-to-cart bg-organic-green hover:bg-opacity-90 text-white px-4 py-2 rounded transition" 
+                            data-id="${product.id}" 
+                            data-name="${product.name}" 
+                            data-price="${product.price}" 
+                            data-unit="${product.unit}" 
+                            data-image="${product.image}">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    createFeaturedProductCard(product) {
+        const card = document.createElement('div');
+        card.className = 'featured-product-card bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300 cursor-pointer';
+        
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="w-24 h-24 object-cover rounded-full mx-auto mb-4">
+            <h3 class="text-lg font-semibold text-organic-brown mb-2">${product.name}</h3>
+            <p class="text-organic-green font-bold">₹${product.price}/${product.unit}</p>
+        `;
+        
+        // Add click handler to navigate to product category
+        card.addEventListener('click', () => {
+            this.showSection('products');
+            setTimeout(() => {
+                this.filterProducts(product.category);
+            }, 100);
+        });
+        
+        return card;
+    }
+
+    filterProducts(category) {
+        if (!this.products) return;
+        
+        const allProducts = document.querySelectorAll('.product-card');
+        allProducts.forEach(card => card.style.display = 'block');
+
+        if (category === 'all') {
+            // Show all products
+            this.renderProducts();
+        } else {
+            // Hide all product grids first
+            const grids = ['vegetables-grid', 'fruits-grid', 'moringa-grid'];
+            grids.forEach(gridId => {
+                const grid = document.getElementById(gridId);
+                if (grid) {
+                    grid.innerHTML = '';
+                }
             });
+
+            // Show only the selected category
+            const categoryProducts = this.products.filter(p => p.category === category);
+            const targetGridMap = {
+                'vegetables': 'vegetables-grid',
+                'fruits': 'fruits-grid', 
+                'moringa': 'moringa-grid'
+            };
+
+            const targetGrid = document.getElementById(targetGridMap[category]);
+            if (targetGrid) {
+                categoryProducts.forEach(product => {
+                    const productCard = this.createProductCard(product);
+                    targetGrid.appendChild(productCard);
+                });
+                this.updateProductEventListeners();
+            }
         }
     }
 
@@ -211,6 +409,60 @@ class ShoppingCart {
         if (allProductsBtn) {
             allProductsBtn.classList.remove('bg-gray-200', 'text-gray-700');
             allProductsBtn.classList.add('active', 'bg-organic-green', 'text-white');
+        }
+    }
+
+    showAdminLoginModal() {
+        const modal = document.getElementById('admin-login-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    hideAdminLoginModal() {
+        const modal = document.getElementById('admin-login-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            // Reset form
+            const form = document.getElementById('admin-login-form');
+            if (form) form.reset();
+        }
+    }
+
+    async handleAdminLogin() {
+        const adminId = document.getElementById('admin-id').value;
+        const password = document.getElementById('admin-password').value;
+
+        try {
+            const response = await fetch('/api/admin-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ adminId, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Store session info and redirect to admin panel
+                document.cookie = `sessionId=${data.sessionId}; path=/`;
+                showNotification('Admin login successful!', 'success');
+                this.hideAdminLoginModal();
+                
+                // Redirect to admin panel
+                setTimeout(() => {
+                    window.location.href = '/admin';
+                }, 1000);
+            } else {
+                showNotification(data.error || 'Login failed', 'error');
+            }
+        } catch (error) {
+            console.error('Admin login error:', error);
+            showNotification('Login failed. Please try again.', 'error');
         }
     }
 

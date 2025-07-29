@@ -10,6 +10,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@sendgrid/mail": "^8.1.5"
+    "@sendgrid/mail": "^8.1.5",
+    "@types/memoizee": "^0.4.12",
+    "memoizee": "^0.4.17",
+    "openid-client": "^6.6.2",
+    "pg": "^8.16.3"
   }
 }

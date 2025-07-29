@@ -2,11 +2,113 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const { Pool } = require('pg');
 const sgMail = require('@sendgrid/mail');
 
 // Initialize SendGrid
 if (process.env.SENDGRID_API_KEY) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
+
+// Initialize PostgreSQL connection
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+});
+
+// Initialize database tables
+async function initializeDatabase() {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS products (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                category VARCHAR(100) NOT NULL,
+                price DECIMAL(10,2) NOT NULL,
+                unit VARCHAR(50) NOT NULL,
+                stock INTEGER NOT NULL DEFAULT 0,
+                description TEXT,
+                image TEXT,
+                featured BOOLEAN DEFAULT false,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Check if products table is empty and insert default products
+        const result = await pool.query('SELECT COUNT(*) FROM products');
+        if (parseInt(result.rows[0].count) === 0) {
+            await insertDefaultProducts();
+        }
+
+        console.log('Database initialized successfully');
+    } catch (error) {
+        console.error('Database initialization error:', error);
+    }
+}
+
+async function insertDefaultProducts() {
+    const defaultProducts = [
+        {
+            name: 'Organic Tomatoes',
+            category: 'vegetables',
+            price: 120,
+            unit: 'kg',
+            stock: 50,
+            description: 'Fresh, juicy tomatoes with 27% higher vitamin C than conventional varieties',
+            image: 'https://pixabay.com/get/g0581cd6d89c6c7a12e15644b3ce8f532a2d47d74c716eb1419a409064c052cba0a3d83a16d8367096b1dad5244e9459e571324b8939249aa26a9756a4fe5036c_1280.jpg',
+            featured: true
+        },
+        {
+            name: 'Organic Potatoes',
+            category: 'vegetables',
+            price: 80,
+            unit: 'kg',
+            stock: 30,
+            description: '4x more vitamin B5 than tomatoes, high in potassium and fiber',
+            image: 'https://pixabay.com/get/g0581cd6d89c6c7a12e15644b3ce8f532a2d47d74c716eb1419a409064c052cba0a3d83a16d8367096b1dad5244e9459e571324b8939249aa26a9756a4fe5036c_1280.jpg',
+            featured: false
+        },
+        {
+            name: 'Fresh Watermelon',
+            category: 'fruits',
+            price: 40,
+            unit: 'kg',
+            stock: 25,
+            description: '92% water content, rich in lycopene and natural antioxidants',
+            image: 'https://pixabay.com/get/gcafab46e499d79507e9eec1e005058491b55741fb6e18b13a53da3b20bd59a938a5bd5bd63d11e391c91dd88c3115d83766dc5f0bf68fef5459afee743127fc6_1280.jpg',
+            featured: true
+        },
+        {
+            name: 'Moringa Powder',
+            category: 'moringa',
+            price: 450,
+            unit: '100g',
+            stock: 20,
+            description: 'Superfood powder with 90+ nutrients, all 9 essential amino acids',
+            image: 'https://pixabay.com/get/g195c00efc787726497e5951c329d525d38709b3524d13b6aa307c3fdd46b86ad1619e6db64d57ef73e5a60c48554a81affb07eb071d73cffbd575713d5a6889f_1280.jpg',
+            featured: true
+        },
+        {
+            name: 'Moringa Tea Powder',
+            category: 'moringa',
+            price: 350,
+            unit: '100g',
+            stock: 15,
+            description: 'Antioxidant-rich tea powder for blood sugar control and heart health',
+            image: 'https://pixabay.com/get/g195c00efc787726497e5951c329d525d38709b3524d13b6aa307c3fdd46b86ad1619e6db64d57ef73e5a60c48554a81affb07eb071d73cffbd575713d5a6889f_1280.jpg',
+            featured: false
+        }
+    ];
+
+    for (const product of defaultProducts) {
+        await pool.query(`
+            INSERT INTO products (name, category, price, unit, stock, description, image, featured)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        `, [product.name, product.category, product.price, product.unit, product.stock, product.description, product.image, product.featured]);
+    }
+    
+    console.log('Default products inserted');
 }
 
 // In-memory storage for OTPs (in production, use Redis or a database)
@@ -86,6 +188,41 @@ async function sendOTPEmail(email, otp, name) {
 }
 
 // Handle API requests
+// Parse request body for POST/PUT requests
+function parseBody(req) {
+    return new Promise((resolve, reject) => {
+        let body = '';
+        req.on('data', chunk => body += chunk);
+        req.on('end', () => {
+            try {
+                resolve(body ? JSON.parse(body) : {});
+            } catch (e) {
+                resolve({});
+            }
+        });
+        req.on('error', reject);
+    });
+}
+
+// Check if user is authenticated as admin
+function isAdminAuthenticated(req) {
+    const cookies = parseCookies(req.headers.cookie || '');
+    const sessionId = cookies.sessionId;
+    return sessionId && userSessions.has(sessionId) && userSessions.get(sessionId).isAdmin;
+}
+
+// Parse cookies helper
+function parseCookies(cookieHeader) {
+    const cookies = {};
+    cookieHeader.split(';').forEach(cookie => {
+        const [name, value] = cookie.trim().split('=');
+        if (name && value) {
+            cookies[name] = decodeURIComponent(value);
+        }
+    });
+    return cookies;
+}
+
 async function handleAPIRequest(req, res, pathname) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -99,6 +236,126 @@ async function handleAPIRequest(req, res, pathname) {
     }
 
     try {
+        // Handle product API endpoints
+        if (pathname.startsWith('/api/products')) {
+            const pathParts = pathname.split('/');
+            
+            if (req.method === 'GET' && pathname === '/api/products') {
+                // Get all products
+                const result = await pool.query('SELECT * FROM products ORDER BY created_at DESC');
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(result.rows));
+                return;
+            }
+            
+            if (req.method === 'POST' && pathname === '/api/products') {
+                // Create new product (admin only)
+                if (!isAdminAuthenticated(req)) {
+                    res.writeHead(401, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Unauthorized' }));
+                    return;
+                }
+                
+                const productData = await parseBody(req);
+                const result = await pool.query(`
+                    INSERT INTO products (name, category, price, unit, stock, description, image, featured)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                    RETURNING *
+                `, [productData.name, productData.category, productData.price, productData.unit, 
+                    productData.stock, productData.description, productData.image, productData.featured]);
+                
+                res.writeHead(201, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(result.rows[0]));
+                return;
+            }
+            
+            if (req.method === 'PUT' && pathParts[2] === 'products' && pathParts[3]) {
+                // Update product (admin only)
+                if (!isAdminAuthenticated(req)) {
+                    res.writeHead(401, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Unauthorized' }));
+                    return;
+                }
+                
+                const productId = pathParts[3];
+                const productData = await parseBody(req);
+                const result = await pool.query(`
+                    UPDATE products 
+                    SET name = $1, category = $2, price = $3, unit = $4, stock = $5, 
+                        description = $6, image = $7, featured = $8, updated_at = CURRENT_TIMESTAMP
+                    WHERE id = $9
+                    RETURNING *
+                `, [productData.name, productData.category, productData.price, productData.unit,
+                    productData.stock, productData.description, productData.image, productData.featured, productId]);
+                
+                if (result.rows.length === 0) {
+                    res.writeHead(404, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Product not found' }));
+                    return;
+                }
+                
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(result.rows[0]));
+                return;
+            }
+            
+            if (req.method === 'DELETE' && pathParts[2] === 'products' && pathParts[3]) {
+                // Delete product (admin only)
+                if (!isAdminAuthenticated(req)) {
+                    res.writeHead(401, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Unauthorized' }));
+                    return;
+                }
+                
+                const productId = pathParts[3];
+                const result = await pool.query('DELETE FROM products WHERE id = $1', [productId]);
+                
+                if (result.rowCount === 0) {
+                    res.writeHead(404, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Product not found' }));
+                    return;
+                }
+                
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ success: true }));
+                return;
+            }
+        }
+        
+        // Handle admin check endpoint
+        if (pathname === '/api/admin/check' && req.method === 'GET') {
+            const cookies = parseCookies(req.headers.cookie || '');
+            const sessionId = cookies.sessionId;
+            
+            if (sessionId && userSessions.has(sessionId) && userSessions.get(sessionId).isAdmin) {
+                const session = userSessions.get(sessionId);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ 
+                    authenticated: true, 
+                    email: session.id,
+                    type: 'admin'
+                }));
+            } else {
+                res.writeHead(401, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Not authenticated' }));
+            }
+            return;
+        }
+        
+        // Handle admin logout
+        if (pathname === '/api/admin/logout' && req.method === 'POST') {
+            const cookies = parseCookies(req.headers.cookie || '');
+            const sessionId = cookies.sessionId;
+            
+            if (sessionId && userSessions.has(sessionId)) {
+                userSessions.delete(sessionId);
+            }
+            
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true }));
+            return;
+        }
+        
         if (pathname === '/api/send-otp' && req.method === 'POST') {
             let body = '';
             req.on('data', chunk => {
@@ -223,6 +480,7 @@ async function handleAPIRequest(req, res, pathname) {
                         userSessions.set(sessionId, {
                             id: adminId,
                             type: 'admin',
+                            isAdmin: true,
                             loginTime: Date.now()
                         });
 
@@ -288,6 +546,12 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    // Serve admin.html for admin routes
+    if (pathname === '/admin' || pathname === '/admin.html') {
+        serveStaticFile(res, './admin.html');
+        return;
+    }
+
     // Serve static files
     let filePath = '.' + pathname;
     if (pathname === '/') {
@@ -298,9 +562,12 @@ const server = http.createServer(async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', async () => {
     console.log(`Server running on http://0.0.0.0:${PORT}`);
     console.log('SendGrid API Key:', process.env.SENDGRID_API_KEY ? 'Configured' : 'Not configured');
+    
+    // Initialize database
+    await initializeDatabase();
 });
 
 // Graceful shutdown
