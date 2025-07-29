@@ -73,29 +73,41 @@
     object-fit: cover;
 }
 
-/* Mobile Menu Styles */
+/* Navigation Styles */
 #mobile-menu {
     transition: all 0.3s ease-in-out;
 }
 
-/* Ensure responsive breakpoints work correctly */
-@media (min-width: 768px) {
-    #mobile-menu {
-        display: none !important;
+/* Mobile menu grid layout */
+#mobile-menu .grid {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
     }
-    
-    .md\:flex {
-        display: flex !important;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-@media (max-width: 767px) {
-    .hidden.md\:flex {
+/* Responsive breakpoints */
+@media (min-width: 1024px) {
+    .lg\:hidden {
         display: none !important;
     }
     
-    .md\:hidden {
-        display: block;
+    .lg\:block {
+        display: block !important;
+    }
+}
+
+@media (max-width: 1023px) {
+    .hidden.lg\:block {
+        display: none !important;
     }
 }
 

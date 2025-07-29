@@ -45,33 +45,29 @@ class ShoppingCart {
             });
         });
 
-        // Mobile menu toggle - Fixed functionality
+        // Simplified mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         
         if (mobileMenuButton && mobileMenu) {
-            console.log('Mobile menu elements found, setting up event listeners');
             mobileMenuButton.addEventListener('click', (e) => {
                 e.stopPropagation();
                 mobileMenu.classList.toggle('hidden');
-                console.log('Mobile menu toggled, hidden class:', mobileMenu.classList.contains('hidden'));
             });
             
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (mobileMenu && !mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-
             // Close mobile menu when clicking nav links
             document.querySelectorAll('#mobile-menu .nav-link').forEach(link => {
                 link.addEventListener('click', () => {
                     mobileMenu.classList.add('hidden');
                 });
             });
-        } else {
-            console.log('Mobile menu elements not found:', { mobileMenuButton, mobileMenu });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
         }
 
         // Cart sidebar toggle

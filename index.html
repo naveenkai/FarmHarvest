@@ -11,89 +11,109 @@
 <body class="bg-cream font-sans">
     <!-- Navigation -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <img src="assets/logo.svg" alt="The SOF Logo" class="w-8 h-8 md:w-12 md:h-12" />
-                <div class="text-sm sm:text-base md:text-2xl font-bold text-organic-green">The Sustainable Organic Farming</div>
-            </div>
-            
-            <!-- User Profile Section -->
-            <div id="user-profile-section" class="hidden md:flex items-center space-x-4">
-                <div class="text-right hidden lg:block">
-                    <div id="user-greeting" class="text-sm text-organic-brown font-medium"></div>
-                    <div id="user-name" class="text-lg font-bold text-organic-green"></div>
+        <!-- Desktop Navigation -->
+        <div class="hidden lg:block">
+            <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <img src="assets/logo.svg" alt="The SOF Logo" class="w-12 h-12" />
+                    <div class="text-2xl font-bold text-organic-green">The Sustainable Organic Farming</div>
                 </div>
-                <div class="relative">
-                    <button id="profile-menu-btn" class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-organic-green hover:border-organic-brown transition">
-                        <img id="user-profile-pic" src="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=40" alt="Profile" class="w-full h-full object-cover">
-                    </button>
-                    <!-- Profile Dropdown -->
-                    <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
-                        <div class="py-2">
-                            <button id="edit-profile-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                                <i class="fas fa-user mr-2"></i>Edit Profile
-                            </button>
-                            <button id="change-photo-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                                <i class="fas fa-camera mr-2"></i>Change Photo
-                            </button>
-                            <hr class="my-1">
-                            <button id="user-logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                            </button>
+                
+                <!-- User Profile Section -->
+                <div id="user-profile-section" class="hidden flex items-center space-x-4">
+                    <div class="text-right">
+                        <div id="user-greeting" class="text-sm text-organic-brown font-medium"></div>
+                        <div id="user-name" class="text-lg font-bold text-organic-green"></div>
+                    </div>
+                    <div class="relative">
+                        <button id="profile-menu-btn" class="w-10 h-10 rounded-full overflow-hidden border-2 border-organic-green hover:border-organic-brown transition">
+                            <img id="user-profile-pic" src="https://ui-avatars.com/api/?name=User&background=4ade80&color=fff&size=40" alt="Profile" class="w-full h-full object-cover">
+                        </button>
+                        <!-- Profile Dropdown -->
+                        <div id="profile-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border hidden z-50">
+                            <div class="py-2">
+                                <button id="edit-profile-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                    <i class="fas fa-user mr-2"></i>Edit Profile
+                                </button>
+                                <button id="change-photo-btn" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                    <i class="fas fa-camera mr-2"></i>Change Photo
+                                </button>
+                                <hr class="my-1">
+                                <button id="user-logout-btn" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Desktop Navigation -->
-            <div class="hidden md:flex space-x-8 items-center">
-                <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Home</a>
-                <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Products</a>
-                <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">About</a>
-                <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
-                <button id="user-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">
-                    <i class="fas fa-user mr-1"></i>Login
-                </button>
-                <button id="admin-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">Admin</button>
-                <button id="cart-toggle" class="relative bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
-                    <i class="fas fa-shopping-cart mr-2"></i>Cart
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hidden">0</span>
-                </button>
-            </div>
-            
-            <!-- Mobile Hamburger Button -->
-            <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-organic-brown">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
+                
+                <div class="flex space-x-8 items-center">
+                    <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Home</a>
+                    <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Products</a>
+                    <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">About</a>
+                    <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link">Contact</a>
+                    <button id="user-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">
+                        <i class="fas fa-user mr-1"></i>Login
+                    </button>
+                    <button id="admin-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300">Admin</button>
+                    <button id="cart-toggle" class="relative bg-organic-green text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition">
+                        <i class="fas fa-shopping-cart mr-2"></i>Cart
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hidden">0</span>
+                    </button>
+                </div>
             </div>
         </div>
-        <!-- Mobile Menu (Only visible on mobile devices) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg border-t border-gray-200">
-            <div class="container mx-auto px-4 py-3">
-                <div class="flex flex-col space-y-4">
-                    <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
-                        <i class="fas fa-home mr-2"></i>Home
-                    </a>
-                    <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
-                        <i class="fas fa-leaf mr-2"></i>Products
-                    </a>
-                    <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
-                        <i class="fas fa-info-circle mr-2"></i>About
-                    </a>
-                    <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-2 border-b border-gray-100">
-                        <i class="fas fa-envelope mr-2"></i>Contact
-                    </a>
-                    <button id="mobile-user-login-btn" class="text-left text-organic-brown hover:text-organic-green transition duration-300 py-2 border-b border-gray-100">
-                        <i class="fas fa-user mr-2"></i>Login
+
+        <!-- Mobile & Tablet Navigation -->
+        <div class="lg:hidden">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="assets/logo.svg" alt="The SOF Logo" class="w-8 h-8" />
+                    <div class="text-sm font-bold text-organic-green">SOF</div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button id="mobile-cart-toggle" class="bg-organic-green text-white px-3 py-2 rounded-lg text-sm">
+                        <i class="fas fa-shopping-cart"></i>
+                        (<span id="mobile-cart-count">0</span>)
                     </button>
-                    <button id="mobile-admin-btn" class="text-left text-organic-brown hover:text-organic-green transition duration-300 py-2 border-b border-gray-100">
-                        <i class="fas fa-cog mr-2"></i>Admin
+                    <button id="mobile-menu-button" class="text-organic-brown p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
                     </button>
-                    <button id="mobile-cart-toggle" class="bg-organic-green text-white px-4 py-3 rounded-lg hover:bg-opacity-90 transition text-center mt-2">
-                        <i class="fas fa-shopping-cart mr-2"></i>Cart (<span id="mobile-cart-count">0</span>)
-                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden bg-white border-t border-gray-200 shadow-lg">
+                <div class="container mx-auto px-4 py-3">
+                    <div class="grid grid-cols-2 gap-4">
+                        <a href="#home" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-3 px-4 rounded-lg hover:bg-gray-50 text-center">
+                            <i class="fas fa-home block mb-1 text-lg"></i>
+                            <span class="text-sm">Home</span>
+                        </a>
+                        <a href="#products" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-3 px-4 rounded-lg hover:bg-gray-50 text-center">
+                            <i class="fas fa-leaf block mb-1 text-lg"></i>
+                            <span class="text-sm">Products</span>
+                        </a>
+                        <a href="#about" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-3 px-4 rounded-lg hover:bg-gray-50 text-center">
+                            <i class="fas fa-info-circle block mb-1 text-lg"></i>
+                            <span class="text-sm">About</span>
+                        </a>
+                        <a href="#contact" class="text-organic-brown hover:text-organic-green transition duration-300 nav-link py-3 px-4 rounded-lg hover:bg-gray-50 text-center">
+                            <i class="fas fa-envelope block mb-1 text-lg"></i>
+                            <span class="text-sm">Contact</span>
+                        </a>
+                        <button id="mobile-user-login-btn" class="text-organic-brown hover:text-organic-green transition duration-300 py-3 px-4 rounded-lg hover:bg-gray-50 text-center">
+                            <i class="fas fa-user block mb-1 text-lg"></i>
+                            <span class="text-sm">Login</span>
+                        </button>
+                        <button id="mobile-admin-btn" class="text-organic-brown hover:text-organic-green transition duration-300 py-3 px-4 rounded-lg hover:bg-gray-50 text-center">
+                            <i class="fas fa-cog block mb-1 text-lg"></i>
+                            <span class="text-sm">Admin</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
