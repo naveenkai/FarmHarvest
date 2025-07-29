@@ -159,7 +159,170 @@ class ShoppingCart {
             });
         }
 
+        // User profile functionality  
+        this.initUserProfileEvents();
+        this.checkUserSession();
         this.updateProductEventListeners();
+    }
+
+    initUserProfileEvents() {
+        // Profile menu toggle
+        const profileMenuBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        
+        if (profileMenuBtn) {
+            profileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            if (profileDropdown) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Tab switching in login modal
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginFormContainer = document.getElementById('login-form-container');
+        const registerFormContainer = document.getElementById('register-form-container');
+
+        if (loginTab && registerTab) {
+            loginTab.addEventListener('click', () => {
+                this.switchToLoginTab();
+            });
+
+            registerTab.addEventListener('click', () => {
+                this.switchToRegisterTab();
+            });
+        }
+
+        // Form submissions
+        const userLoginForm = document.getElementById('user-login-form');
+        const userRegisterForm = document.getElementById('user-register-form');
+        const otpForm = document.getElementById('otp-form');
+        const profileEditForm = document.getElementById('profile-edit-form');
+
+        if (userLoginForm) {
+            userLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleUserLogin();
+            });
+        }
+
+        if (userRegisterForm) {
+            userRegisterForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleUserRegister();
+            });
+        }
+
+        if (otpForm) {
+            otpForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleOTPVerification();
+            });
+        }
+
+        if (profileEditForm) {
+            profileEditForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleProfileUpdate();
+            });
+        }
+
+        // Modal close events
+        this.setupModalCloseEvents();
+        
+        // Profile actions
+        this.setupProfileActions();
+        
+        // Photo selection
+        this.setupPhotoSelection();
+    }
+
+    setupModalCloseEvents() {
+        const modals = [
+            { modal: '#user-login-modal', close: '#close-user-modal', method: 'hideUserLoginModal' },
+            { modal: '#otp-modal', close: '#close-otp-modal', method: 'hideOTPModal' },
+            { modal: '#profile-edit-modal', close: '#close-profile-modal', method: 'hideProfileEditModal' },
+            { modal: '#photo-selection-modal', close: '#close-photo-modal', method: 'hidePhotoSelectionModal' }
+        ];
+
+        modals.forEach(({ modal, close, method }) => {
+            const modalEl = document.querySelector(modal);
+            const closeBtn = document.querySelector(close);
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => this[method]());
+            }
+            
+            if (modalEl) {
+                modalEl.addEventListener('click', (e) => {
+                    if (e.target === modalEl) {
+                        this[method]();
+                    }
+                });
+            }
+        });
+    }
+
+    setupProfileActions() {
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const changePhotoBtn = document.getElementById('change-photo-btn');
+        const userLogoutBtn = document.getElementById('user-logout-btn');
+        const cancelProfileEdit = document.getElementById('cancel-profile-edit');
+        const changeProfilePicBtn = document.getElementById('change-profile-pic-btn');
+        const resendOtpBtn = document.getElementById('resend-otp');
+
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', () => this.showProfileEditModal());
+        }
+
+        if (changePhotoBtn) {
+            changePhotoBtn.addEventListener('click', () => this.showPhotoSelectionModal());
+        }
+
+        if (userLogoutBtn) {
+            userLogoutBtn.addEventListener('click', () => this.handleUserLogout());
+        }
+
+        if (cancelProfileEdit) {
+            cancelProfileEdit.addEventListener('click', () => this.hideProfileEditModal());
+        }
+
+        if (changeProfilePicBtn) {
+            changeProfilePicBtn.addEventListener('click', () => this.showPhotoSelectionModal());
+        }
+
+        if (resendOtpBtn) {
+            resendOtpBtn.addEventListener('click', () => this.resendOTP());
+        }
+    }
+
+    setupPhotoSelection() {
+        const photoOptions = document.querySelectorAll('.photo-option');
+        const useCustomPhotoBtn = document.getElementById('use-custom-photo');
+        const customPhotoUrl = document.getElementById('custom-photo-url');
+
+        photoOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const photoUrl = option.dataset.photo;
+                this.selectProfilePhoto(photoUrl);
+            });
+        });
+
+        if (useCustomPhotoBtn) {
+            useCustomPhotoBtn.addEventListener('click', () => {
+                const photoUrl = customPhotoUrl.value.trim();
+                if (photoUrl) {
+                    this.selectProfilePhoto(photoUrl);
+                }
+            });
+        }
     }
 
     updateProductEventListeners() {
