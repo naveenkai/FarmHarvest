@@ -94,20 +94,22 @@
     }
 }
 
-/* Responsive breakpoints */
+/* Responsive Navigation Fix */
 @media (min-width: 768px) {
-    .md\:hidden {
-        display: none !important;
-    }
-    
-    .md\:block {
+    .desktop-nav {
         display: block !important;
+    }
+    .mobile-nav {
+        display: none !important;
     }
 }
 
 @media (max-width: 767px) {
-    .hidden.md\:block {
+    .desktop-nav {
         display: none !important;
+    }
+    .mobile-nav {
+        display: block !important;
     }
 }
 
