@@ -691,12 +691,15 @@ class ShoppingCart {
             name: this.currentUserData.name,
             phone: this.currentUserData.phone || '',
             profilePic: this.generateDefaultProfilePic(this.currentUserData.name),
-            sessionId: data.sessionId
+            sessionId: data.sessionId || 'user-session'
         };
 
         // Store user data
         localStorage.setItem('userData', JSON.stringify(userData));
-        document.cookie = `sessionId=${data.sessionId}; path=/`;
+        
+        // Create session cookie
+        const sessionId = userData.sessionId;
+        document.cookie = `sessionId=${sessionId}; path=/; expires=${new Date(Date.now() + 24*60*60*1000).toUTCString()}`;
 
         // Show user profile
         this.displayUserProfile(userData);
@@ -814,14 +817,53 @@ class ShoppingCart {
         showNotification('Profile photo updated!', 'success');
     }
 
-    checkUserSession() {
+    async checkUserSession() {
         const userData = JSON.parse(localStorage.getItem('userData') || 'null');
         if (userData && userData.sessionId) {
-            this.displayUserProfile(userData);
+            // Check if session is still valid on server
+            try {
+                const response = await fetch('/api/check-session', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    this.displayUserProfile(userData);
+                } else {
+                    // Session expired, clear local data
+                    localStorage.removeItem('userData');
+                    this.showLoginButtons();
+                }
+            } catch (error) {
+                console.log('Session check failed, showing login');
+                this.displayUserProfile(userData); // Show profile anyway for offline functionality
+            }
         }
     }
 
-    handleUserLogout() {
+    showLoginButtons() {
+        const loginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
+        loginBtns.forEach(btn => {
+            if (btn) btn.style.display = 'block';
+        });
+        
+        const userProfileSection = document.getElementById('user-profile-section');
+        if (userProfileSection) {
+            userProfileSection.classList.add('hidden');
+        }
+    }
+
+    async handleUserLogout() {
+        try {
+            // Notify server about logout
+            await fetch('/api/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        } catch (error) {
+            console.log('Server logout failed, continuing with client logout');
+        }
+        
         // Clear user data
         localStorage.removeItem('userData');
         document.cookie = 'sessionId=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
@@ -833,11 +875,7 @@ class ShoppingCart {
         }
         
         // Show login buttons
-        const loginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
-        loginBtns.forEach(btn => {
-            if (btn) btn.style.display = 'block';
-        });
-        
+        this.showLoginButtons();
         this.hideProfileDropdown();
         showNotification('Logged out successfully!', 'success');
     }
