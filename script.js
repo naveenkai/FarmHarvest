@@ -5,10 +5,34 @@ class ShoppingCart {
         this.init();
     }
 
-    init() {
+    async init() {
         this.bindEvents();
         this.updateCartDisplay();
         this.updateCartCount();
+        // Ensure category filters start in default state
+        this.resetCategoryFilters();
+        // Initialize hero carousel
+        this.initHeroCarousel();
+        // Load products from database
+        await this.loadProducts();
+    }
+
+    async loadProducts() {
+        try {
+            const response = await fetch('/api/products');
+            if (response.ok) {
+                this.products = await response.json();
+                this.renderProducts();
+                this.renderFeaturedProducts();
+                this.updateProductEventListeners();
+            } else {
+                console.error('Failed to load products');
+                showNotification('Failed to load products', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading products:', error);
+            showNotification('Error loading products', 'error');
+        }
     }
 
     bindEvents() {
@@ -21,13 +45,28 @@ class ShoppingCart {
             });
         });
 
-        // Mobile menu toggle
+        // Simplified mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         
         if (mobileMenuButton && mobileMenu) {
-            mobileMenuButton.addEventListener('click', () => {
+            mobileMenuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
                 mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close mobile menu when clicking nav links
+            document.querySelectorAll('#mobile-menu .nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
             });
         }
 
@@ -40,6 +79,26 @@ class ShoppingCart {
             this.toggleCart();
         });
 
+        // Hero cart toggle
+        document.getElementById('hero-cart-toggle').addEventListener('click', () => {
+            this.toggleCart();
+        });
+
+        // Back to home button
+        document.getElementById('back-to-home').addEventListener('click', () => {
+            this.showSection('home');
+        });
+
+        // Cart card buttons
+        document.getElementById('order-now-btn').addEventListener('click', () => {
+            this.toggleCart();
+        });
+
+        document.getElementById('view-cart-from-order').addEventListener('click', () => {
+            // Continue shopping - do nothing, just close any open modals
+            this.closeCart();
+        });
+
         document.getElementById('close-cart').addEventListener('click', () => {
             this.closeCart();
         });
@@ -48,23 +107,244 @@ class ShoppingCart {
             this.closeCart();
         });
 
+        // Checkout button
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            this.checkout();
+        });
+
+        // Contact form
+        const contactForm = document.querySelector('#contact form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleContactForm(contactForm);
+            });
+        }
+
+        // User login functionality
+        const userLoginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
+        userLoginBtns.forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    this.showUserLoginModal();
+                });
+            }
+        });
+
+        // Admin login functionality
+        const adminLoginBtns = document.querySelectorAll('#admin-login-btn, #mobile-admin-btn');
+        adminLoginBtns.forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    this.showAdminLoginModal();
+                });
+            }
+        });
+
+        // Admin login modal events
+        const adminLoginModal = document.getElementById('admin-login-modal');
+        const closeAdminModal = document.getElementById('close-admin-modal');
+        const cancelAdminLogin = document.getElementById('cancel-admin-login');
+        const adminLoginForm = document.getElementById('admin-login-form');
+
+        if (closeAdminModal) {
+            closeAdminModal.addEventListener('click', () => {
+                this.hideAdminLoginModal();
+            });
+        }
+
+        if (cancelAdminLogin) {
+            cancelAdminLogin.addEventListener('click', () => {
+                this.hideAdminLoginModal();
+            });
+        }
+
+        if (adminLoginForm) {
+            adminLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleAdminLogin();
+            });
+        }
+
+        if (adminLoginModal) {
+            adminLoginModal.addEventListener('click', (e) => {
+                if (e.target.id === 'admin-login-modal') {
+                    this.hideAdminLoginModal();
+                }
+            });
+        }
+
+        // User profile functionality  
+        this.initUserProfileEvents();
+        this.checkUserSession();
+        this.updateProductEventListeners();
+    }
+
+    initUserProfileEvents() {
+        // Profile menu toggle
+        const profileMenuBtn = document.getElementById('profile-menu-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        
+        if (profileMenuBtn) {
+            profileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileDropdown.classList.toggle('hidden');
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            if (profileDropdown) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+
+        // Tab switching in login modal
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginFormContainer = document.getElementById('login-form-container');
+        const registerFormContainer = document.getElementById('register-form-container');
+
+        if (loginTab && registerTab) {
+            loginTab.addEventListener('click', () => {
+                this.switchToLoginTab();
+            });
+
+            registerTab.addEventListener('click', () => {
+                this.switchToRegisterTab();
+            });
+        }
+
+        // Form submissions
+        const userLoginForm = document.getElementById('user-login-form');
+        const userRegisterForm = document.getElementById('user-register-form');
+        const otpForm = document.getElementById('otp-form');
+        const profileEditForm = document.getElementById('profile-edit-form');
+
+        if (userLoginForm) {
+            userLoginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleUserLogin();
+            });
+        }
+
+        if (userRegisterForm) {
+            userRegisterForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleUserRegister();
+            });
+        }
+
+        if (otpForm) {
+            otpForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleOTPVerification();
+            });
+        }
+
+        if (profileEditForm) {
+            profileEditForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.handleProfileUpdate();
+            });
+        }
+
+        // Modal close events
+        this.setupModalCloseEvents();
+        
+        // Profile actions
+        this.setupProfileActions();
+        
+        // Photo selection
+        this.setupPhotoSelection();
+    }
+
+    setupModalCloseEvents() {
+        const modals = [
+            { modal: '#user-login-modal', close: '#close-user-modal', method: 'hideUserLoginModal' },
+            { modal: '#otp-modal', close: '#close-otp-modal', method: 'hideOTPModal' },
+            { modal: '#profile-edit-modal', close: '#close-profile-modal', method: 'hideProfileEditModal' },
+            { modal: '#photo-selection-modal', close: '#close-photo-modal', method: 'hidePhotoSelectionModal' }
+        ];
+
+        modals.forEach(({ modal, close, method }) => {
+            const modalEl = document.querySelector(modal);
+            const closeBtn = document.querySelector(close);
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => this[method]());
+            }
+            
+            if (modalEl) {
+                modalEl.addEventListener('click', (e) => {
+                    if (e.target === modalEl) {
+                        this[method]();
+                    }
+                });
+            }
+        });
+    }
+
+    setupProfileActions() {
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const changePhotoBtn = document.getElementById('change-photo-btn');
+        const userLogoutBtn = document.getElementById('user-logout-btn');
+        const cancelProfileEdit = document.getElementById('cancel-profile-edit');
+        const changeProfilePicBtn = document.getElementById('change-profile-pic-btn');
+        const resendOtpBtn = document.getElementById('resend-otp');
+
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', () => this.showProfileEditModal());
+        }
+
+        if (changePhotoBtn) {
+            changePhotoBtn.addEventListener('click', () => this.showPhotoSelectionModal());
+        }
+
+        if (userLogoutBtn) {
+            userLogoutBtn.addEventListener('click', () => this.handleUserLogout());
+        }
+
+        if (cancelProfileEdit) {
+            cancelProfileEdit.addEventListener('click', () => this.hideProfileEditModal());
+        }
+
+        if (changeProfilePicBtn) {
+            changeProfilePicBtn.addEventListener('click', () => this.showPhotoSelectionModal());
+        }
+
+        if (resendOtpBtn) {
+            resendOtpBtn.addEventListener('click', () => this.resendOTP());
+        }
+    }
+
+    setupPhotoSelection() {
+        const photoOptions = document.querySelectorAll('.photo-option');
+        const useCustomPhotoBtn = document.getElementById('use-custom-photo');
+        const customPhotoUrl = document.getElementById('custom-photo-url');
+
+        photoOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const photoUrl = option.dataset.photo;
+                this.selectProfilePhoto(photoUrl);
+            });
+        });
+
+        if (useCustomPhotoBtn) {
+            useCustomPhotoBtn.addEventListener('click', () => {
+                const photoUrl = customPhotoUrl.value.trim();
+                if (photoUrl) {
+                    this.selectProfilePhoto(photoUrl);
+                }
+            });
+        }
+    }
+
+    updateProductEventListeners() {
         // Add to cart buttons
         document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const productData = {
-                    id: button.dataset.id,
-                    name: button.dataset.name,
-                    price: parseFloat(button.dataset.price),
-                    unit: button.dataset.unit,
-                    image: button.dataset.image
-                };
-                
-                const quantityInput = button.closest('.product-card').querySelector('.quantity-input');
-                const quantity = parseInt(quantityInput.value);
-                
-                this.addToCart(productData, quantity);
-                this.showAddedFeedback(button);
-            });
+            button.removeEventListener('click', this.handleAddToCart);
+            button.addEventListener('click', this.handleAddToCart.bind(this));
         });
 
         // Quantity controls
@@ -98,19 +378,149 @@ class ShoppingCart {
                 button.classList.add('active', 'bg-organic-green', 'text-white');
             });
         });
+    }
 
-        // Checkout button
-        document.getElementById('checkout-btn').addEventListener('click', () => {
-            this.checkout();
+    handleAddToCart(e) {
+        const button = e.target;
+        const productData = {
+            id: button.dataset.id,
+            name: button.dataset.name,
+            price: parseFloat(button.dataset.price),
+            unit: button.dataset.unit,
+            image: button.dataset.image
+        };
+        
+        const quantityInput = button.closest('.product-card').querySelector('.quantity-input');
+        const quantity = parseInt(quantityInput.value);
+        
+        this.addToCart(productData, quantity);
+        this.showAddedFeedback(button);
+    }
+
+    renderProducts() {
+        const productContainers = [
+            { id: 'vegetables-grid', category: 'vegetables' },
+            { id: 'fruits-grid', category: 'fruits' }, 
+            { id: 'moringa-grid', category: 'moringa' }
+        ];
+
+        productContainers.forEach(container => {
+            const grid = document.getElementById(container.id);
+            if (grid) {
+                const categoryProducts = this.products.filter(p => p.category === container.category);
+                grid.innerHTML = '';
+                
+                categoryProducts.forEach(product => {
+                    const productCard = this.createProductCard(product);
+                    grid.appendChild(productCard);
+                });
+            }
         });
+    }
 
-        // Contact form
-        const contactForm = document.querySelector('#contact form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.handleContactForm(contactForm);
+    renderFeaturedProducts() {
+        const featuredGrid = document.getElementById('featured-products-grid');
+        if (!featuredGrid) return;
+
+        const featuredProducts = this.products.filter(p => p.featured);
+        featuredGrid.innerHTML = '';
+
+        featuredProducts.forEach(product => {
+            const productCard = this.createFeaturedProductCard(product);
+            featuredGrid.appendChild(productCard);
+        });
+    }
+
+    createProductCard(product) {
+        const card = document.createElement('div');
+        card.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300';
+        
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h3 class="text-lg font-semibold text-organic-brown mb-2">${product.name}</h3>
+                <p class="text-gray-600 text-sm mb-3">${product.description}</p>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl font-bold text-organic-green">₹${product.price}/${product.unit}</span>
+                    <span class="text-sm text-gray-500">Stock: ${product.stock}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <button class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-l px-2 py-1" data-action="decrease">-</button>
+                        <input type="number" class="quantity-input w-16 text-center border-t border-b border-gray-200 py-1" min="1" max="10" value="1">
+                        <button class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-r px-2 py-1" data-action="increase">+</button>
+                    </div>
+                    <button class="add-to-cart bg-organic-green hover:bg-opacity-90 text-white px-4 py-2 rounded transition" 
+                            data-id="${product.id}" 
+                            data-name="${product.name}" 
+                            data-price="${product.price}" 
+                            data-unit="${product.unit}" 
+                            data-image="${product.image}">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    createFeaturedProductCard(product) {
+        const card = document.createElement('div');
+        card.className = 'featured-product-card bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300 cursor-pointer';
+        
+        card.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="w-24 h-24 object-cover rounded-full mx-auto mb-4">
+            <h3 class="text-lg font-semibold text-organic-brown mb-2">${product.name}</h3>
+            <p class="text-organic-green font-bold">₹${product.price}/${product.unit}</p>
+        `;
+        
+        // Add click handler to navigate to product category
+        card.addEventListener('click', () => {
+            this.showSection('products');
+            setTimeout(() => {
+                this.filterProducts(product.category);
+            }, 100);
+        });
+        
+        return card;
+    }
+
+    filterProducts(category) {
+        if (!this.products) return;
+        
+        const allProducts = document.querySelectorAll('.product-card');
+        allProducts.forEach(card => card.style.display = 'block');
+
+        if (category === 'all') {
+            // Show all products
+            this.renderProducts();
+        } else {
+            // Hide all product grids first
+            const grids = ['vegetables-grid', 'fruits-grid', 'moringa-grid'];
+            grids.forEach(gridId => {
+                const grid = document.getElementById(gridId);
+                if (grid) {
+                    grid.innerHTML = '';
+                }
             });
+
+            // Show only the selected category
+            const categoryProducts = this.products.filter(p => p.category === category);
+            const targetGridMap = {
+                'vegetables': 'vegetables-grid',
+                'fruits': 'fruits-grid', 
+                'moringa': 'moringa-grid'
+            };
+
+            const targetGrid = document.getElementById(targetGridMap[category]);
+            if (targetGrid) {
+                categoryProducts.forEach(product => {
+                    const productCard = this.createProductCard(product);
+                    targetGrid.appendChild(productCard);
+                });
+                this.updateProductEventListeners();
+            }
         }
     }
 
@@ -124,6 +534,11 @@ class ShoppingCart {
         const targetSection = document.getElementById(sectionId);
         if (targetSection) {
             targetSection.classList.remove('hidden');
+        }
+
+        // Reset category filters when not in products section
+        if (sectionId !== 'products') {
+            this.resetCategoryFilters();
         }
 
         // Close mobile menu
@@ -163,6 +578,484 @@ class ShoppingCart {
                 productsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }, 100);
+    }
+
+    resetCategoryFilters() {
+        // Force reset all category filters to default state
+        document.querySelectorAll('.category-filter').forEach(btn => {
+            // Remove all possible active classes
+            btn.classList.remove('active', 'bg-organic-green', 'text-white');
+            // Add default classes
+            btn.classList.add('bg-gray-200', 'text-gray-700');
+            // Remove any inline styles that might be causing issues
+            btn.style.backgroundColor = '';
+            btn.style.color = '';
+        });
+        
+        // Set "All Products" as active
+        const allProductsBtn = document.querySelector('[data-category="all"]');
+        if (allProductsBtn) {
+            allProductsBtn.classList.remove('bg-gray-200', 'text-gray-700');
+            allProductsBtn.classList.add('active', 'bg-organic-green', 'text-white');
+        }
+    }
+
+    showAdminLoginModal() {
+        const modal = document.getElementById('admin-login-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    hideAdminLoginModal() {
+        const modal = document.getElementById('admin-login-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            // Reset form
+            const form = document.getElementById('admin-login-form');
+            if (form) form.reset();
+        }
+    }
+
+    async handleAdminLogin() {
+        const adminId = document.getElementById('admin-id').value;
+        const password = document.getElementById('admin-password').value;
+
+        try {
+            const response = await fetch('/api/admin-login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ adminId, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Store session info and redirect to admin panel
+                document.cookie = `sessionId=${data.sessionId}; path=/`;
+                showNotification('Admin login successful!', 'success');
+                this.hideAdminLoginModal();
+                
+                // Redirect to admin panel
+                setTimeout(() => {
+                    window.location.href = '/admin';
+                }, 1000);
+            } else {
+                showNotification(data.error || 'Login failed', 'error');
+            }
+        } catch (error) {
+            console.error('Admin login error:', error);
+            showNotification('Login failed. Please try again.', 'error');
+        }
+    }
+
+    // User Profile Methods
+    showUserLoginModal() {
+        const modal = document.getElementById('user-login-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            this.switchToLoginTab();
+        }
+    }
+
+    hideUserLoginModal() {
+        const modal = document.getElementById('user-login-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            this.resetUserForms();
+        }
+    }
+
+    showOTPModal() {
+        this.hideUserLoginModal();
+        const modal = document.getElementById('otp-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    hideOTPModal() {
+        const modal = document.getElementById('otp-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('otp-form').reset();
+        }
+    }
+
+    showProfileEditModal() {
+        const modal = document.getElementById('profile-edit-modal');
+        if (modal) {
+            this.populateProfileEditForm();
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        this.hideProfileDropdown();
+    }
+
+    hideProfileEditModal() {
+        const modal = document.getElementById('profile-edit-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    showPhotoSelectionModal() {
+        const modal = document.getElementById('photo-selection-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        this.hideProfileEditModal();
+    }
+
+    hidePhotoSelectionModal() {
+        const modal = document.getElementById('photo-selection-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('custom-photo-url').value = '';
+        }
+    }
+
+    hideProfileDropdown() {
+        const dropdown = document.getElementById('profile-dropdown');
+        if (dropdown) {
+            dropdown.classList.add('hidden');
+        }
+    }
+
+    switchToLoginTab() {
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form-container');
+        const registerForm = document.getElementById('register-form-container');
+
+        if (loginTab && registerTab && loginForm && registerForm) {
+            loginTab.classList.add('border-organic-green', 'text-organic-green');
+            loginTab.classList.remove('text-gray-500');
+            
+            registerTab.classList.remove('border-organic-green', 'text-organic-green');
+            registerTab.classList.add('text-gray-500');
+            
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+        }
+    }
+
+    switchToRegisterTab() {
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form-container');
+        const registerForm = document.getElementById('register-form-container');
+
+        if (loginTab && registerTab && loginForm && registerForm) {
+            registerTab.classList.add('border-organic-green', 'text-organic-green', 'border-b-2');
+            registerTab.classList.remove('text-gray-500');
+            
+            loginTab.classList.remove('border-organic-green', 'text-organic-green', 'border-b-2');
+            loginTab.classList.add('text-gray-500');
+            
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        }
+    }
+
+    resetUserForms() {
+        const forms = ['user-login-form', 'user-register-form'];
+        forms.forEach(formId => {
+            const form = document.getElementById(formId);
+            if (form) form.reset();
+        });
+    }
+
+    async handleUserLogin() {
+        const email = document.getElementById('login-email').value;
+        const name = document.getElementById('login-name').value;
+        
+        try {
+            const otp = this.generateOTP();
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, otp })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                this.currentUserData = { email, name, type: 'login' };
+                this.showOTPModal();
+                showNotification('OTP sent to your email!', 'success');
+            } else {
+                showNotification(data.error || 'Failed to send OTP', 'error');
+            }
+        } catch (error) {
+            console.error('User login error:', error);
+            showNotification('Login failed. Please try again.', 'error');
+        }
+    }
+
+    async handleUserRegister() {
+        const name = document.getElementById('register-name').value;
+        const email = document.getElementById('register-email').value;
+        const phone = document.getElementById('register-phone').value;
+        
+        try {
+            const otp = this.generateOTP();
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, otp })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                this.currentUserData = { email, name, phone, type: 'register' };
+                this.showOTPModal();
+                showNotification('OTP sent to your email!', 'success');
+            } else {
+                showNotification(data.error || 'Failed to send OTP', 'error');
+            }
+        } catch (error) {
+            console.error('User register error:', error);
+            showNotification('Registration failed. Please try again.', 'error');
+        }
+    }
+
+    async handleOTPVerification() {
+        const otp = document.getElementById('otp-input').value;
+        
+        if (!this.currentUserData) {
+            showNotification('Session expired. Please try again.', 'error');
+            this.hideOTPModal();
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    email: this.currentUserData.email,
+                    otp: otp
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                this.handleSuccessfulLogin(data);
+            } else {
+                showNotification(data.error || 'Invalid OTP', 'error');
+            }
+        } catch (error) {
+            console.error('OTP verification error:', error);
+            showNotification('Verification failed. Please try again.', 'error');
+        }
+    }
+
+    handleSuccessfulLogin(data) {
+        const userData = {
+            email: this.currentUserData.email,
+            name: this.currentUserData.name,
+            phone: this.currentUserData.phone || '',
+            profilePic: this.generateDefaultProfilePic(this.currentUserData.name),
+            sessionId: data.sessionId || 'user-session'
+        };
+
+        // Store user data
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        // Create session cookie
+        const sessionId = userData.sessionId;
+        document.cookie = `sessionId=${sessionId}; path=/; expires=${new Date(Date.now() + 24*60*60*1000).toUTCString()}`;
+
+        // Show user profile
+        this.displayUserProfile(userData);
+        this.hideOTPModal();
+        
+        showNotification(`Welcome ${userData.name}!`, 'success');
+        this.currentUserData = null;
+    }
+
+    displayUserProfile(userData) {
+        // Update profile section
+        const userProfileSection = document.getElementById('user-profile-section');
+        const userGreeting = document.getElementById('user-greeting');
+        const userName = document.getElementById('user-name');
+        const userProfilePic = document.getElementById('user-profile-pic');
+        
+        if (userProfileSection && userGreeting && userName && userProfilePic) {
+            userGreeting.textContent = this.getGreeting();
+            userName.textContent = userData.name;
+            userProfilePic.src = userData.profilePic;
+            userProfileSection.classList.remove('hidden');
+        }
+
+        // Hide login buttons
+        const loginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
+        loginBtns.forEach(btn => {
+            if (btn) btn.style.display = 'none';
+        });
+    }
+
+    getGreeting() {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good Morning!';
+        if (hour < 17) return 'Good Afternoon!';
+        return 'Good Evening!';
+    }
+
+    generateDefaultProfilePic(name) {
+        const colors = ['4ade80', '059669', '0f766e', '92400e', 'be185d', '1e40af', '7c2d12', '374151'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${randomColor}&color=fff&size=40`;
+    }
+
+    generateOTP() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    async resendOTP() {
+        if (!this.currentUserData) return;
+        
+        try {
+            const otp = this.generateOTP();
+            const response = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: this.currentUserData.email,
+                    name: this.currentUserData.name,
+                    otp: otp
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                showNotification('OTP resent successfully!', 'success');
+            } else {
+                showNotification('Failed to resend OTP', 'error');
+            }
+        } catch (error) {
+            showNotification('Failed to resend OTP', 'error');
+        }
+    }
+
+    populateProfileEditForm() {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        document.getElementById('edit-name').value = userData.name || '';
+        document.getElementById('edit-email').value = userData.email || '';
+        document.getElementById('edit-phone').value = userData.phone || '';
+        document.getElementById('preview-profile-pic').src = userData.profilePic || '';
+    }
+
+    async handleProfileUpdate() {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        const updatedData = {
+            ...userData,
+            name: document.getElementById('edit-name').value,
+            phone: document.getElementById('edit-phone').value
+        };
+
+        // Update local storage
+        localStorage.setItem('userData', JSON.stringify(updatedData));
+        
+        // Update display
+        this.displayUserProfile(updatedData);
+        this.hideProfileEditModal();
+        
+        showNotification('Profile updated successfully!', 'success');
+    }
+
+    selectProfilePhoto(photoUrl) {
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        userData.profilePic = photoUrl;
+        
+        // Update local storage
+        localStorage.setItem('userData', JSON.stringify(userData));
+        
+        // Update all profile pictures
+        const profilePics = document.querySelectorAll('#user-profile-pic, #preview-profile-pic');
+        profilePics.forEach(pic => {
+            if (pic) pic.src = photoUrl;
+        });
+        
+        this.hidePhotoSelectionModal();
+        showNotification('Profile photo updated!', 'success');
+    }
+
+    async checkUserSession() {
+        const userData = JSON.parse(localStorage.getItem('userData') || 'null');
+        if (userData && userData.sessionId) {
+            // Check if session is still valid on server
+            try {
+                const response = await fetch('/api/check-session', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    this.displayUserProfile(userData);
+                } else {
+                    // Session expired, clear local data
+                    localStorage.removeItem('userData');
+                    this.showLoginButtons();
+                }
+            } catch (error) {
+                console.log('Session check failed, showing login');
+                this.displayUserProfile(userData); // Show profile anyway for offline functionality
+            }
+        }
+    }
+
+    showLoginButtons() {
+        const loginBtns = document.querySelectorAll('#user-login-btn, #mobile-user-login-btn');
+        loginBtns.forEach(btn => {
+            if (btn) btn.style.display = 'block';
+        });
+        
+        const userProfileSection = document.getElementById('user-profile-section');
+        if (userProfileSection) {
+            userProfileSection.classList.add('hidden');
+        }
+    }
+
+    async handleUserLogout() {
+        try {
+            // Notify server about logout
+            await fetch('/api/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        } catch (error) {
+            console.log('Server logout failed, continuing with client logout');
+        }
+        
+        // Clear user data
+        localStorage.removeItem('userData');
+        document.cookie = 'sessionId=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        
+        // Hide profile section
+        const userProfileSection = document.getElementById('user-profile-section');
+        if (userProfileSection) {
+            userProfileSection.classList.add('hidden');
+        }
+        
+        // Show login buttons
+        this.showLoginButtons();
+        this.hideProfileDropdown();
+        showNotification('Logged out successfully!', 'success');
     }
 
     filterProducts(category) {
@@ -259,8 +1152,10 @@ class ShoppingCart {
 
     updateCartCount() {
         const count = this.items.reduce((sum, item) => sum + item.quantity, 0);
-        const cartCountElements = document.querySelectorAll('#cart-count, #mobile-cart-count');
+        const total = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         
+        // Update cart count elements
+        const cartCountElements = document.querySelectorAll('#cart-count, #mobile-cart-count, #hero-cart-count');
         cartCountElements.forEach(element => {
             element.textContent = count;
             if (count > 0) {
@@ -269,6 +1164,68 @@ class ShoppingCart {
                 element.classList.add('hidden');
             }
         });
+
+        // Update order card
+        this.updateOrderCard(count, total);
+    }
+
+    updateOrderCard(count, total) {
+        const orderCard = document.getElementById('order-now-card');
+        const orderCardCount = document.getElementById('order-card-count');
+        const orderCardTotal = document.getElementById('order-card-total');
+        
+        if (count > 0) {
+            orderCard.classList.remove('hidden');
+            orderCardCount.textContent = count;
+            orderCardTotal.textContent = `₹${total}`;
+        } else {
+            orderCard.classList.add('hidden');
+        }
+    }
+
+    processOrder() {
+        if (this.items.length === 0) {
+            alert('Your cart is empty! Please add some items before ordering.');
+            return;
+        }
+
+        const total = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const itemsList = this.items.map(item => `${item.name} (${item.quantity} ${item.unit})`).join(', ');
+        
+        const orderDetails = `
+🌱 ORDER CONFIRMATION 🌱
+
+Thank you for choosing The Sustainable Organic Farming!
+
+📦 Order Details:
+${itemsList}
+
+💰 Total Amount: ₹${total}
+
+📞 Next Steps:
+• Our team will contact you within 2 hours to confirm your order
+• We'll arrange delivery at your preferred time
+• Payment can be made upon delivery (Cash on Delivery)
+
+📍 Delivery Areas: Within 10km of Lanjigarh, Odisha
+🚚 Delivery Time: 7 AM - 12 PM or 3 PM - 7 PM
+🆓 Free delivery on orders above ₹500
+
+Thank you for supporting sustainable organic farming! 🌿
+        `;
+        
+        alert(orderDetails);
+        
+        // Clear cart after successful order
+        this.items = [];
+        this.saveCart();
+        this.updateCartDisplay();
+        this.updateCartCount();
+        
+        // Show success message
+        setTimeout(() => {
+            alert('🎉 Order placed successfully! We will contact you soon for delivery confirmation.');
+        }, 500);
     }
 
     toggleCart() {
@@ -353,6 +1310,63 @@ class ShoppingCart {
     loadCart() {
         const saved = localStorage.getItem('organicFarmCart');
         return saved ? JSON.parse(saved) : [];
+    }
+
+    initHeroCarousel() {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.carousel-indicator');
+        let currentSlide = 0;
+        let slideInterval;
+
+        // Auto-slide functionality
+        const nextSlide = () => {
+            slides[currentSlide].classList.remove('active');
+            indicators[currentSlide].classList.remove('active');
+            
+            currentSlide = (currentSlide + 1) % slides.length;
+            
+            slides[currentSlide].classList.add('active');
+            indicators[currentSlide].classList.add('active');
+        };
+
+        // Start auto-sliding every 4 seconds
+        const startAutoSlide = () => {
+            slideInterval = setInterval(nextSlide, 4000);
+        };
+
+        startAutoSlide();
+
+        // Manual indicator clicks
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                // Clear the auto-slide timer
+                clearInterval(slideInterval);
+                
+                // Update slides
+                slides[currentSlide].classList.remove('active');
+                indicators[currentSlide].classList.remove('active');
+                
+                currentSlide = index;
+                
+                slides[currentSlide].classList.add('active');
+                indicators[currentSlide].classList.add('active');
+                
+                // Restart auto-sliding after 4 seconds
+                setTimeout(startAutoSlide, 4000);
+            });
+        });
+
+        // Pause on hover
+        const heroSection = document.querySelector('.hero');
+        if (heroSection) {
+            heroSection.addEventListener('mouseenter', () => {
+                clearInterval(slideInterval);
+            });
+            
+            heroSection.addEventListener('mouseleave', () => {
+                startAutoSlide();
+            });
+        }
     }
 }
 

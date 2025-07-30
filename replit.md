@@ -106,16 +106,35 @@ Preferred communication style: Simple, everyday language.
 ## Technical Limitations
 
 ### Current Constraints
-- **No Backend**: All functionality is client-side
 - **No Payment Processing**: Cart is for demonstration purposes
 - **No User Accounts**: No authentication or user management
 - **No Inventory Management**: No real-time stock tracking
 - **No Order Processing**: No actual order fulfillment system
 
+### Recent Changes (July 29, 2025)
+- **Migration Completed**: Successfully migrated from Replit Agent to Replit environment
+- **Backend Integration**: Added Node.js server with authentication capabilities
+- **Email Integration**: SendGrid integration for OTP-based authentication
+- **Enhanced UI**: Added cart button to hero section with organic color scheme matching
+- **Layout Reorganization**: Moved Featured Products section to top of home page (after hero), followed by "Why Choose Our Organic Products" section
+- **Filter Reset Fix**: Improved category filter reset functionality to prevent featured products from staying green after navigation
+- **Hero Carousel**: Added auto-sliding image carousel to hero section featuring organic products (eggs, desi chicken, moringa tree, moringa powder) with smooth transitions and manual indicators
+- **Admin Panel**: Comprehensive admin panel with PostgreSQL database integration for product management
+- **User Profile System**: Complete user authentication with profile photos, personalized greetings, and profile management
+- **Dynamic Content**: Products now load dynamically from database instead of static HTML
+- **Responsive Navigation**: Fixed navigation visibility issues with custom CSS classes for desktop/mobile breakpoints
+- **Company Branding**: Desktop shows full company name on one line, mobile shows "The Sustainable" / "Organic Farming" on two lines
+
+### Backend Architecture
+- **Technology Stack**: Node.js HTTP server with vanilla JavaScript frontend
+- **Authentication**: OTP-based email verification system using SendGrid
+- **Admin System**: Credential-based admin login functionality
+- **Session Management**: In-memory session storage for user/admin sessions
+- **API Endpoints**: RESTful endpoints for authentication and cart management
+
 ### Future Enhancement Opportunities
-- Backend integration for order processing
+- Database integration for persistent data storage
 - Payment gateway integration
-- User authentication system
 - Inventory management system
 - Admin panel for product management
-- Database integration for persistent data storage
+- Production-ready session storage (Redis)
